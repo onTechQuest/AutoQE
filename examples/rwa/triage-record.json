@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "record_id": "e5024be0-a039-442f-a686-450d14f98875",
+  "created_at": "2026-09-30T12:02:00Z",
+  "source_ids": ["synthetic-execution-001", "payment-transfer-valid-recipient-ui"],
+  "source_fingerprints": {},
+  "producer": "autoqe-example",
+  "producer_version": "0.1.0",
+  "limitations": ["The synthetic failure does not support a product root-cause claim."],
+  "triage_id": "synthetic-triage-001",
+  "execution_id": "synthetic-execution-001",
+  "test_id": "payment-transfer-valid-recipient-ui",
+  "classification": "UNKNOWN",
+  "summary": "The synthetic expected state transition was not observed; evidence is insufficient to assign a cause.",
+  "expected_behavior_reference": "outcome-2",
+  "observed_behavior_reference": "assertion:outcome-2",
+  "supporting_evidence_refs": [
+    {"kind": "RESPONSE_METADATA", "uri": "artifacts/synthetic-execution-001/response-metadata.json", "description": "Synthetic metadata reference only."}
+  ],
+  "recommended_next_action": "Collect a reproducible execution and sanitized state evidence before classifying the cause."
+}

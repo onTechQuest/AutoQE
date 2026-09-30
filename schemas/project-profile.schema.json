@@ -1,0 +1,423 @@
+{
+  "$defs": {
+    "ApiContractProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "$ref": "#/$defs/ContractFormat"
+        },
+        "location": {
+          "title": "Location",
+          "type": "string"
+        }
+      },
+      "required": [
+        "location",
+        "format"
+      ],
+      "title": "ApiContractProfile",
+      "type": "object"
+    },
+    "ApplicationEndpoints": {
+      "additionalProperties": false,
+      "properties": {
+        "api_base_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Api Base Url"
+        },
+        "ui_base_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ui Base Url"
+        }
+      },
+      "title": "ApplicationEndpoints",
+      "type": "object"
+    },
+    "AuthenticationProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "setup_adapter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Setup Adapter"
+        },
+        "strategy": {
+          "$ref": "#/$defs/AuthenticationStrategy"
+        }
+      },
+      "required": [
+        "strategy"
+      ],
+      "title": "AuthenticationProfile",
+      "type": "object"
+    },
+    "AuthenticationStrategy": {
+      "enum": [
+        "NONE",
+        "TEST_FIXTURE",
+        "USER_PROVIDED",
+        "UNKNOWN"
+      ],
+      "title": "AuthenticationStrategy",
+      "type": "string"
+    },
+    "Availability": {
+      "enum": [
+        "AVAILABLE",
+        "UNAVAILABLE",
+        "UNKNOWN"
+      ],
+      "title": "Availability",
+      "type": "string"
+    },
+    "ContractFormat": {
+      "enum": [
+        "OPENAPI",
+        "JSON_SCHEMA",
+        "SOURCE_AND_TESTS",
+        "UNKNOWN"
+      ],
+      "title": "ContractFormat",
+      "type": "string"
+    },
+    "EnvironmentProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "network_scope": {
+          "$ref": "#/$defs/NetworkScope"
+        },
+        "readiness_urls": {
+          "items": {
+            "format": "uri",
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Readiness Urls",
+          "type": "array"
+        },
+        "reset_adapter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reset Adapter"
+        },
+        "reset_identity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reset Identity"
+        },
+        "reset_supported": {
+          "title": "Reset Supported",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "reset_supported",
+        "network_scope"
+      ],
+      "title": "EnvironmentProfile",
+      "type": "object"
+    },
+    "ExecutionCapabilities": {
+      "additionalProperties": false,
+      "properties": {
+        "api": {
+          "$ref": "#/$defs/Availability"
+        },
+        "ui": {
+          "$ref": "#/$defs/Availability"
+        }
+      },
+      "required": [
+        "ui",
+        "api"
+      ],
+      "title": "ExecutionCapabilities",
+      "type": "object"
+    },
+    "NetworkScope": {
+      "enum": [
+        "LOCAL_ONLY",
+        "REMOTE_ALLOWED",
+        "UNKNOWN"
+      ],
+      "title": "NetworkScope",
+      "type": "string"
+    },
+    "ProjectAdapterProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "title": "Adapter Id",
+          "type": "string"
+        },
+        "adapter_version": {
+          "title": "Adapter Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "adapter_id",
+        "adapter_version"
+      ],
+      "title": "ProjectAdapterProfile",
+      "type": "object"
+    },
+    "ReferenceTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "repository_url": {
+          "format": "uri",
+          "minLength": 1,
+          "title": "Repository Url",
+          "type": "string"
+        },
+        "revision": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repository_url",
+        "revision"
+      ],
+      "title": "ReferenceTarget",
+      "type": "object"
+    },
+    "RequirementProvider": {
+      "enum": [
+        "LOCAL_FILES",
+        "URLS",
+        "UNKNOWN"
+      ],
+      "title": "RequirementProvider",
+      "type": "string"
+    },
+    "RequirementSources": {
+      "additionalProperties": false,
+      "properties": {
+        "locations": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Locations",
+          "type": "array"
+        },
+        "provider": {
+          "$ref": "#/$defs/RequirementProvider"
+        }
+      },
+      "required": [
+        "provider",
+        "locations"
+      ],
+      "title": "RequirementSources",
+      "type": "object"
+    },
+    "RuntimeProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "language": {
+          "title": "Language",
+          "type": "string"
+        },
+        "language_version_accepted": {
+          "title": "Language Version Accepted",
+          "type": "string"
+        },
+        "language_version_qualified": {
+          "title": "Language Version Qualified",
+          "type": "string"
+        },
+        "language_version_required": {
+          "title": "Language Version Required",
+          "type": "string"
+        },
+        "package_manager": {
+          "title": "Package Manager",
+          "type": "string"
+        },
+        "package_manager_version": {
+          "title": "Package Manager Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "language",
+        "language_version_required",
+        "language_version_accepted",
+        "language_version_qualified",
+        "package_manager",
+        "package_manager_version"
+      ],
+      "title": "RuntimeProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "api_contract": {
+      "$ref": "#/$defs/ApiContractProfile"
+    },
+    "application": {
+      "$ref": "#/$defs/ApplicationEndpoints"
+    },
+    "authentication": {
+      "$ref": "#/$defs/AuthenticationProfile"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentProfile"
+    },
+    "execution_capabilities": {
+      "$ref": "#/$defs/ExecutionCapabilities"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "producer": {
+      "default": "autoqe",
+      "title": "Producer",
+      "type": "string"
+    },
+    "producer_version": {
+      "default": "0.1.0",
+      "title": "Producer Version",
+      "type": "string"
+    },
+    "project_adapter": {
+      "$ref": "#/$defs/ProjectAdapterProfile"
+    },
+    "project_id": {
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "project_name": {
+      "title": "Project Name",
+      "type": "string"
+    },
+    "record_id": {
+      "format": "uuid",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "reference_target": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ReferenceTarget"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "requirements": {
+      "$ref": "#/$defs/RequirementSources"
+    },
+    "runtime": {
+      "$ref": "#/$defs/RuntimeProfile"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_fingerprints": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Fingerprints",
+      "type": "object"
+    },
+    "source_ids": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project_id",
+    "project_name",
+    "requirements",
+    "application",
+    "runtime",
+    "environment",
+    "authentication",
+    "execution_capabilities",
+    "api_contract",
+    "project_adapter"
+  ],
+  "title": "ProjectProfile",
+  "type": "object"
+}

@@ -1,0 +1,1 @@
+"""Typed provider and project-adapter boundaries only; implementations are deferred."""

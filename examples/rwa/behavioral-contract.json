@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "record_id": "b2024be0-a039-442f-a686-450d14f98872",
+  "created_at": "2026-09-30T12:00:00Z",
+  "source_ids": ["rwa-reference-workflows"],
+  "source_fingerprints": {},
+  "producer": "autoqe",
+  "producer_version": "0.1.0",
+  "limitations": ["Synthetic behavioral example; not product requirements or an executed outcome."],
+  "contract_id": "payment-transfer-valid-recipient",
+  "project_id": "cypress-rwa",
+  "requirement_ids": ["REQ-PAY-001"],
+  "title": "Authenticated user sends a valid payment",
+  "intent": "Describe the expected business behavior for a valid payment without prescribing UI selectors or API routes.",
+  "risk_level": "HIGH",
+  "preconditions": ["The sender is authenticated."],
+  "business_conditions": ["The recipient is valid.", "The amount is positive and within available funds."],
+  "expected_behaviors": [
+    {
+      "behavior_id": "PAY-EXPECTED-001",
+      "description": "A valid payment is recorded and reflected in the sender and recipient account state."
+    }
+  ],
+  "forbidden_behaviors": [
+    {
+      "behavior_id": "PAY-FORBIDDEN-001",
+      "description": "A rejected payment must not change either account balance."
+    }
+  ],
+  "state_transitions": [
+    {
+      "from_state": "payment not recorded",
+      "event": "valid payment submitted",
+      "to_state": "payment recorded"
+    }
+  ],
+  "authorization_constraints": ["Only the authenticated account owner may initiate the payment."],
+  "assumptions": ["The example uses synthetic seeded data."],
+  "unknowns": ["Product-specific limits and fees are not defined by this example."]
+}

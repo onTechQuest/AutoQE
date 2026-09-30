@@ -1,0 +1,231 @@
+{
+  "$defs": {
+    "BehaviorExpectation": {
+      "additionalProperties": false,
+      "properties": {
+        "behavior_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "title": "Behavior Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "behavior_id",
+        "description"
+      ],
+      "title": "BehaviorExpectation",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "CRITICAL",
+        "HIGH",
+        "MEDIUM",
+        "LOW",
+        "UNKNOWN"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "StateTransition": {
+      "additionalProperties": false,
+      "properties": {
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "from_state": {
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "title": "To State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from_state",
+        "event",
+        "to_state"
+      ],
+      "title": "StateTransition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "authorization_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Authorization Constraints",
+      "type": "array"
+    },
+    "business_conditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Business Conditions",
+      "type": "array"
+    },
+    "contract_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "title": "Contract Id",
+      "type": "string"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expected_behaviors": {
+      "items": {
+        "$ref": "#/$defs/BehaviorExpectation"
+      },
+      "minItems": 1,
+      "title": "Expected Behaviors",
+      "type": "array"
+    },
+    "forbidden_behaviors": {
+      "items": {
+        "$ref": "#/$defs/BehaviorExpectation"
+      },
+      "title": "Forbidden Behaviors",
+      "type": "array"
+    },
+    "intent": {
+      "title": "Intent",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "preconditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "producer": {
+      "default": "autoqe",
+      "title": "Producer",
+      "type": "string"
+    },
+    "producer_version": {
+      "default": "0.1.0",
+      "title": "Producer Version",
+      "type": "string"
+    },
+    "project_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "record_id": {
+      "format": "uuid",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "requirement_ids": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_fingerprints": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Fingerprints",
+      "type": "object"
+    },
+    "source_ids": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    },
+    "state_transitions": {
+      "items": {
+        "$ref": "#/$defs/StateTransition"
+      },
+      "title": "State Transitions",
+      "type": "array"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "unknowns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unknowns",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_id",
+    "project_id",
+    "requirement_ids",
+    "title",
+    "intent",
+    "risk_level",
+    "expected_behaviors"
+  ],
+  "title": "BehavioralContract",
+  "type": "object"
+}

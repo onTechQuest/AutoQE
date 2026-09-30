@@ -1,0 +1,341 @@
+{
+  "$defs": {
+    "Availability": {
+      "enum": [
+        "AVAILABLE",
+        "UNAVAILABLE",
+        "UNKNOWN"
+      ],
+      "title": "Availability",
+      "type": "string"
+    },
+    "EvidenceRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "$ref": "#/$defs/Availability"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_type": {
+          "title": "Evidence Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_type",
+        "description",
+        "availability"
+      ],
+      "title": "EvidenceRequirement",
+      "type": "object"
+    },
+    "ExpectedOutcome": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "outcome_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "title": "Outcome Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome_id",
+        "description"
+      ],
+      "title": "ExpectedOutcome",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "CRITICAL",
+        "HIGH",
+        "MEDIUM",
+        "LOW",
+        "UNKNOWN"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "ScenarioType": {
+      "enum": [
+        "POSITIVE",
+        "NEGATIVE",
+        "BOUNDARY",
+        "AUTHORIZATION",
+        "STATE_TRANSITION"
+      ],
+      "title": "ScenarioType",
+      "type": "string"
+    },
+    "SemanticAction": {
+      "enum": [
+        "NAVIGATE",
+        "AUTHENTICATE",
+        "SELECT_ENTITY",
+        "ENTER_VALUE",
+        "SUBMIT",
+        "ASSERT",
+        "RESET",
+        "WAIT_FOR_STATE"
+      ],
+      "title": "SemanticAction",
+      "type": "string"
+    },
+    "SemanticStep": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/SemanticAction"
+        },
+        "data_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Ref"
+        },
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "title": "Step Id",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "step_id",
+        "action",
+        "target"
+      ],
+      "title": "SemanticStep",
+      "type": "object"
+    },
+    "TestLayer": {
+      "enum": [
+        "UI",
+        "API",
+        "BOTH"
+      ],
+      "title": "TestLayer",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cleanup_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Cleanup Requirements",
+      "type": "array"
+    },
+    "contract_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "title": "Contract Id",
+      "type": "string"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_requirements": {
+      "items": {
+        "$ref": "#/$defs/EvidenceRequirement"
+      },
+      "title": "Evidence Requirements",
+      "type": "array"
+    },
+    "expected_outcomes": {
+      "items": {
+        "$ref": "#/$defs/ExpectedOutcome"
+      },
+      "minItems": 1,
+      "title": "Expected Outcomes",
+      "type": "array"
+    },
+    "intent": {
+      "title": "Intent",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "preconditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "priority": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "producer": {
+      "default": "autoqe",
+      "title": "Producer",
+      "type": "string"
+    },
+    "producer_version": {
+      "default": "0.1.0",
+      "title": "Producer Version",
+      "type": "string"
+    },
+    "project_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "record_id": {
+      "format": "uuid",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "requirement_ids": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "scenario_type": {
+      "$ref": "#/$defs/ScenarioType"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_fingerprints": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Fingerprints",
+      "type": "object"
+    },
+    "source_ids": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/SemanticStep"
+      },
+      "minItems": 1,
+      "title": "Steps",
+      "type": "array"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "test_data_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Test Data Requirements",
+      "type": "array"
+    },
+    "test_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "title": "Test Id",
+      "type": "string"
+    },
+    "test_layer": {
+      "$ref": "#/$defs/TestLayer"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "test_id",
+    "project_id",
+    "contract_id",
+    "requirement_ids",
+    "title",
+    "intent",
+    "risk_level",
+    "priority",
+    "test_layer",
+    "scenario_type",
+    "steps",
+    "expected_outcomes"
+  ],
+  "title": "TestSpec",
+  "type": "object"
+}
