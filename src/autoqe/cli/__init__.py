@@ -1,0 +1,1 @@
+"""Small command-line entry points for AutoQE contract workflows."""

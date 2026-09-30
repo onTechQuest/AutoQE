@@ -11,7 +11,7 @@
   "project_name": "Cypress Real World App",
   "requirements": {
     "provider": "LOCAL_FILES",
-    "locations": ["docs/M1_REFERENCE_QUALIFICATION.md"]
+    "locations": ["examples/rwa/requirements"]
   },
   "application": {
     "ui_base_url": "http://localhost:3000",

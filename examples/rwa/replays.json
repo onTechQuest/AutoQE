@@ -1,0 +1,134 @@
+{
+  "replays": [
+    {
+      "task": "extract_behavioral_contract",
+      "project_id": "cypress-rwa",
+      "source_ids": ["md-examples-rwa-requirements-payments"],
+      "source_fingerprints": {
+        "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+      },
+      "limitations": [
+        "Only explicitly supplied, profile-allowed Markdown requirement sources are included.",
+        "No repository browsing, Cypress benchmark source, secrets, or hidden defect metadata is included."
+      ],
+      "response": {
+        "schema_version": "1.0",
+        "record_id": "f1024be0-a039-442f-a686-450d14f98876",
+        "created_at": "2026-09-30T12:10:00Z",
+        "source_ids": ["md-examples-rwa-requirements-payments"],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "producer": "autoqe-replay",
+        "producer_version": "0.1.0",
+        "limitations": ["Approved offline replay; no model was called."],
+        "contract_id": "contract-payment-valid-001",
+        "project_id": "cypress-rwa",
+        "requirement_ids": ["REQ-PAY-001"],
+        "title": "Submit a valid payment",
+        "intent": "An authenticated account holder can send a valid payment to an eligible recipient.",
+        "risk_level": "HIGH",
+        "preconditions": ["The sender is authenticated."],
+        "business_conditions": ["The recipient is eligible to receive a payment.", "The payment amount is positive."],
+        "expected_behaviors": [
+          {"behavior_id": "payment-recorded-once", "description": "A valid payment is recorded once after submission."},
+          {"behavior_id": "payment-reflected", "description": "A successful payment is reflected in sender and recipient account state."}
+        ],
+        "forbidden_behaviors": [
+          {"behavior_id": "invalid-payment-not-recorded", "description": "An invalid payment request does not create a transaction."}
+        ],
+        "state_transitions": [
+          {"from_state": "Pending payment", "event": "Valid payment submitted", "to_state": "Recorded payment"}
+        ],
+        "authorization_constraints": [],
+        "assumptions": [],
+        "unknowns": ["Insufficient-funds handling, fees, and payment limits are not specified."]
+      }
+    },
+    {
+      "task": "extract_behavioral_contract",
+      "project_id": "cypress-rwa",
+      "source_ids": ["md-examples-rwa-requirements-authorization"],
+      "source_fingerprints": {
+        "md-examples-rwa-requirements-authorization": "76e2878a945937a6e35f8565b040c5fbe56148498ef48baa25743109a66c4935"
+      },
+      "limitations": [
+        "Only explicitly supplied, profile-allowed Markdown requirement sources are included.",
+        "No repository browsing, Cypress benchmark source, secrets, or hidden defect metadata is included."
+      ],
+      "response": {
+        "schema_version": "1.0",
+        "record_id": "f2024be0-a039-442f-a686-450d14f98877",
+        "created_at": "2026-09-30T12:10:00Z",
+        "source_ids": ["md-examples-rwa-requirements-authorization"],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-authorization": "76e2878a945937a6e35f8565b040c5fbe56148498ef48baa25743109a66c4935"
+        },
+        "producer": "autoqe-replay",
+        "producer_version": "0.1.0",
+        "limitations": ["Approved offline replay; no model was called."],
+        "contract_id": "contract-account-owner-only-001",
+        "project_id": "cypress-rwa",
+        "requirement_ids": ["REQ-AUTHZ-001"],
+        "title": "Restrict account data to its owner",
+        "intent": "Users may access or change only account data they are authorized to own.",
+        "risk_level": "CRITICAL",
+        "preconditions": ["A target account or profile belongs to a user.", "A request is made by an authenticated user."],
+        "business_conditions": [],
+        "expected_behaviors": [
+          {"behavior_id": "owner-access-allowed", "description": "The owner can access their own private account data."}
+        ],
+        "forbidden_behaviors": [
+          {"behavior_id": "non-owner-read-denied", "description": "A non-owner cannot access another user's private account data."},
+          {"behavior_id": "non-owner-write-denied", "description": "A non-owner cannot change another user's private account data."}
+        ],
+        "state_transitions": [],
+        "authorization_constraints": ["Private account access and changes are limited to the account owner."],
+        "assumptions": [],
+        "unknowns": ["Administrative access and delegated ownership rules are not specified."]
+      }
+    },
+    {
+      "task": "extract_behavioral_contract",
+      "project_id": "cypress-rwa",
+      "source_ids": ["md-examples-rwa-requirements-account-setup"],
+      "source_fingerprints": {
+        "md-examples-rwa-requirements-account-setup": "661e1c84fc34f1b9bf979a39aae1cb1f8c81f319ab3026527d606f2496556ed7"
+      },
+      "limitations": [
+        "Only explicitly supplied, profile-allowed Markdown requirement sources are included.",
+        "No repository browsing, Cypress benchmark source, secrets, or hidden defect metadata is included."
+      ],
+      "response": {
+        "schema_version": "1.0",
+        "record_id": "f3024be0-a039-442f-a686-450d14f98878",
+        "created_at": "2026-09-30T12:10:00Z",
+        "source_ids": ["md-examples-rwa-requirements-account-setup"],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-account-setup": "661e1c84fc34f1b9bf979a39aae1cb1f8c81f319ab3026527d606f2496556ed7"
+        },
+        "producer": "autoqe-replay",
+        "producer_version": "0.1.0",
+        "limitations": ["Approved offline replay; no model was called."],
+        "contract_id": "contract-account-setup-001",
+        "project_id": "cypress-rwa",
+        "requirement_ids": ["REQ-ACCT-001"],
+        "title": "Associate a bank account with its owner",
+        "intent": "An authenticated user can set up a bank account associated with their own profile.",
+        "risk_level": "HIGH",
+        "preconditions": ["The user is authenticated."],
+        "business_conditions": [],
+        "expected_behaviors": [
+          {"behavior_id": "account-associated-to-owner", "description": "A successfully created bank account is associated with the requesting authenticated user."}
+        ],
+        "forbidden_behaviors": [
+          {"behavior_id": "unauthenticated-account-creation-denied", "description": "An unauthenticated user cannot create a bank account."}
+        ],
+        "state_transitions": [],
+        "authorization_constraints": ["A user may manage only bank accounts associated with their own profile."],
+        "assumptions": ["The account setup request identifies the authenticated owner."],
+        "unknowns": ["Required account fields and account-number validation rules are not specified."]
+      }
+    }
+  ]
+}

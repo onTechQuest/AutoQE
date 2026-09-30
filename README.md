@@ -16,4 +16,14 @@ py -3.13 -m venv .venv
 .venv/Scripts/python.exe -m pytest tests -q
 ```
 
-See [M0 architecture and contracts](docs/M0_ARCHITECTURE_CONTRACTS.md) and [M1 reference qualification](docs/M1_REFERENCE_QUALIFICATION.md).
+M1 adds bounded Markdown requirement extraction with an offline replay provider:
+
+```powershell
+.venv/Scripts/python.exe -m autoqe.cli.extract_contract `
+	--project-profile examples/rwa/project-profile.json `
+	--requirements examples/rwa/requirements/payments.md `
+	--provider replay `
+	--output reports/contracts
+```
+
+See [M0 architecture and contracts](docs/M0_ARCHITECTURE_CONTRACTS.md), [M1 context and contracts](docs/M1_CONTEXT_AND_CONTRACTS.md), and [M1 reference qualification](docs/M1_REFERENCE_QUALIFICATION.md).
