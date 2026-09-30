@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "record_id": "f3024be0-a039-442f-a686-450d14f98878",
+  "created_at": "2026-09-30T12:10:00Z",
+  "source_ids": ["md-examples-rwa-requirements-account-setup"],
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-account-setup": "661e1c84fc34f1b9bf979a39aae1cb1f8c81f319ab3026527d606f2496556ed7"
+  },
+  "producer": "autoqe-replay",
+  "producer_version": "0.1.0",
+  "limitations": ["Approved offline M1 replay; no model was called."],
+  "contract_id": "contract-account-setup-001",
+  "project_id": "cypress-rwa",
+  "requirement_ids": ["REQ-ACCT-001"],
+  "title": "Associate a bank account with its owner",
+  "intent": "An authenticated user can set up a bank account associated with their own profile.",
+  "risk_level": "HIGH",
+  "preconditions": ["The user is authenticated."],
+  "business_conditions": [],
+  "expected_behaviors": [
+    {"behavior_id": "account-associated-to-owner", "description": "A successfully created bank account is associated with the requesting authenticated user."}
+  ],
+  "forbidden_behaviors": [
+    {"behavior_id": "unauthenticated-account-creation-denied", "description": "An unauthenticated user cannot create a bank account."}
+  ],
+  "state_transitions": [],
+  "authorization_constraints": ["A user may manage only bank accounts associated with their own profile."],
+  "assumptions": ["The account setup request identifies the authenticated owner."],
+  "unknowns": ["Required account fields and account-number validation rules are not specified."]
+}

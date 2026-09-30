@@ -129,6 +129,149 @@
         "assumptions": ["The account setup request identifies the authenticated owner."],
         "unknowns": ["Required account fields and account-number validation rules are not specified."]
       }
+    },
+    {
+      "task": "extract_behavioral_contract",
+      "project_id": "cypress-rwa",
+      "source_ids": ["md-examples-rwa-requirements-transaction-history"],
+      "source_fingerprints": {
+        "md-examples-rwa-requirements-transaction-history": "a2fd8bdf1be6050daa87eecd16999d9400fbd23ba3b7cdce727c9f9dbb202a10"
+      },
+      "limitations": [
+        "Only explicitly supplied, profile-allowed Markdown requirement sources are included.",
+        "No repository browsing, Cypress benchmark source, secrets, or hidden defect metadata is included."
+      ],
+      "response": {
+        "schema_version": "1.0",
+        "record_id": "f4024be0-a039-442f-a686-450d14f98879",
+        "created_at": "2026-09-30T12:10:00Z",
+        "source_ids": ["md-examples-rwa-requirements-transaction-history"],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-transaction-history": "a2fd8bdf1be6050daa87eecd16999d9400fbd23ba3b7cdce727c9f9dbb202a10"
+        },
+        "producer": "autoqe-replay",
+        "producer_version": "0.1.0",
+        "limitations": ["Approved offline replay; no model was called."],
+        "contract_id": "contract-transaction-history-001",
+        "project_id": "cypress-rwa",
+        "requirement_ids": ["REQ-HIST-001"],
+        "title": "Show recorded transactions to participants",
+        "intent": "Participants can review the transactions associated with their accounts.",
+        "risk_level": "MEDIUM",
+        "preconditions": ["The user is authenticated."],
+        "business_conditions": [],
+        "expected_behaviors": [
+          {"behavior_id": "sender-sees-payment", "description": "A sender can find a recorded payment in their transaction history."},
+          {"behavior_id": "recipient-sees-payment", "description": "A recipient can find a received payment in their transaction history."}
+        ],
+        "forbidden_behaviors": [],
+        "state_transitions": [],
+        "authorization_constraints": [],
+        "assumptions": [],
+        "unknowns": ["Transaction ordering, retention duration, and pagination behavior are not specified."]
+      }
+    }
+  ],
+  "planning_replays": [
+    {
+      "task": "plan_test_specs",
+      "input_fingerprint": "3b63dcfb8efa8476ae7968bda7a3b4da82aa74fd9dfec9b1d81a30ec6a145fea",
+      "response": {
+        "schema_version": "1.0",
+        "scenarios": [
+          {
+            "scenario_id": "contract-payment-valid-001-positive",
+            "steps": [
+              {"step_id": "pay-positive-1", "action": "AUTHENTICATE", "target": "sender"},
+              {"step_id": "pay-positive-2", "action": "SELECT_ENTITY", "target": "eligible recipient"},
+              {"step_id": "pay-positive-3", "action": "ENTER_VALUE", "target": "positive payment amount", "data_ref": "payment-amount"},
+              {"step_id": "pay-positive-4", "action": "SUBMIT", "target": "valid payment"},
+              {"step_id": "pay-positive-5", "action": "ASSERT", "target": "resulting account state"}
+            ]
+          },
+          {
+            "scenario_id": "contract-payment-valid-001-negative",
+            "steps": [
+              {"step_id": "pay-negative-1", "action": "AUTHENTICATE", "target": "sender"},
+              {"step_id": "pay-negative-2", "action": "SUBMIT", "target": "invalid payment request"},
+              {"step_id": "pay-negative-3", "action": "ASSERT", "target": "transaction not created"}
+            ]
+          },
+          {
+            "scenario_id": "contract-payment-valid-001-state-transition",
+            "steps": [
+              {"step_id": "pay-state-1", "action": "AUTHENTICATE", "target": "sender"},
+              {"step_id": "pay-state-2", "action": "SUBMIT", "target": "valid payment"},
+              {"step_id": "pay-state-3", "action": "WAIT_FOR_STATE", "target": "recorded payment"},
+              {"step_id": "pay-state-4", "action": "ASSERT", "target": "sender and recipient state"}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "plan_test_specs",
+      "input_fingerprint": "8e8b45f72c2d3c69eedc9d358050f5bd2629205fc98cbb6771db073026257595",
+      "response": {
+        "schema_version": "1.0",
+        "scenarios": [
+          {
+            "scenario_id": "contract-account-owner-only-001-positive",
+            "steps": [
+              {"step_id": "owner-positive-1", "action": "AUTHENTICATE", "target": "account owner"},
+              {"step_id": "owner-positive-2", "action": "ASSERT", "target": "owner private account access"}
+            ]
+          },
+          {
+            "scenario_id": "contract-account-owner-only-001-authorization",
+            "steps": [
+              {"step_id": "owner-auth-1", "action": "AUTHENTICATE", "target": "non-owner"},
+              {"step_id": "owner-auth-2", "action": "ASSERT", "target": "private account access denied"}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "plan_test_specs",
+      "input_fingerprint": "7f7462fc87d8eeaf0c95fa8b17be386f6d34c5a129b21bd23aa9d5498913a12f",
+      "response": {
+        "schema_version": "1.0",
+        "scenarios": [
+          {
+            "scenario_id": "contract-account-setup-001-positive",
+            "steps": [
+              {"step_id": "account-positive-1", "action": "AUTHENTICATE", "target": "account owner"},
+              {"step_id": "account-positive-2", "action": "SUBMIT", "target": "bank account setup"},
+              {"step_id": "account-positive-3", "action": "ASSERT", "target": "account associated with owner"}
+            ]
+          },
+          {
+            "scenario_id": "contract-account-setup-001-authorization",
+            "steps": [
+              {"step_id": "account-auth-1", "action": "AUTHENTICATE", "target": "account owner"},
+              {"step_id": "account-auth-2", "action": "ASSERT", "target": "only associated accounts are manageable"}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "plan_test_specs",
+      "input_fingerprint": "944e074973c2d29d2e12becfb2682bc589f0e5302e7408e102ad5116b42af672",
+      "response": {
+        "schema_version": "1.0",
+        "scenarios": [
+          {
+            "scenario_id": "contract-transaction-history-001-positive",
+            "steps": [
+              {"step_id": "history-positive-1", "action": "AUTHENTICATE", "target": "history participant"},
+              {"step_id": "history-positive-2", "action": "ASSERT", "target": "sender payment visibility"},
+              {"step_id": "history-positive-3", "action": "ASSERT", "target": "recipient payment visibility"}
+            ]
+          }
+        ]
+      }
     }
   ]
 }

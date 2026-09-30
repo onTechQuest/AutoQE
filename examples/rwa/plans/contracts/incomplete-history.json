@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "record_id": "f4024be0-a039-442f-a686-450d14f98879",
+  "created_at": "2026-09-30T12:10:00Z",
+  "source_ids": ["md-examples-rwa-requirements-transaction-history"],
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-transaction-history": "a2fd8bdf1be6050daa87eecd16999d9400fbd23ba3b7cdce727c9f9dbb202a10"
+  },
+  "producer": "autoqe-replay",
+  "producer_version": "0.1.0",
+  "limitations": ["Approved offline M1 replay; unknown history behavior is intentionally unresolved."],
+  "contract_id": "contract-transaction-history-001",
+  "project_id": "cypress-rwa",
+  "requirement_ids": ["REQ-HIST-001"],
+  "title": "Show recorded transactions to participants",
+  "intent": "Participants can review the transactions associated with their accounts.",
+  "risk_level": "MEDIUM",
+  "preconditions": ["The user is authenticated."],
+  "business_conditions": [],
+  "expected_behaviors": [
+    {"behavior_id": "sender-sees-payment", "description": "A sender can find a recorded payment in their transaction history."},
+    {"behavior_id": "recipient-sees-payment", "description": "A recipient can find a received payment in their transaction history."}
+  ],
+  "forbidden_behaviors": [],
+  "state_transitions": [],
+  "authorization_constraints": [],
+  "assumptions": [],
+  "unknowns": ["Transaction ordering, retention duration, and pagination behavior are not specified."]
+}

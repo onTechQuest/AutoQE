@@ -27,3 +27,14 @@ M1 adds bounded Markdown requirement extraction with an offline replay provider:
 ```
 
 See [M0 architecture and contracts](docs/M0_ARCHITECTURE_CONTRACTS.md), [M1 context and contracts](docs/M1_CONTEXT_AND_CONTRACTS.md), and [M1 reference qualification](docs/M1_REFERENCE_QUALIFICATION.md).
+
+M2 adds bounded, offline risk-based TestSpec planning from a validated BehavioralContract:
+
+```powershell
+.venv/Scripts/python.exe scripts/plan_tests.py `
+	--project-profile examples/rwa/project-profile.json `
+	--contract examples/rwa/plans/contracts/payment.json `
+	--provider replay
+```
+
+See [M2 risk-based planning](docs/M2_RISK_BASED_PLANNING.md). Planning does not execute tests.
