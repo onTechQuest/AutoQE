@@ -281,7 +281,10 @@ def test_extraction_emits_no_test_spec_and_imports_no_execution_stack() -> None:
     contract = extract_behavioral_contract(profile, context, ReplayModelProvider(REPLAYS))
     assert type(contract) is BehavioralContract
     assert "test_id" not in contract.model_dump()
-    sources = [path.read_text(encoding="utf-8").lower() for path in (ROOT / "src/autoqe").rglob("*.py")]
+    sources = [
+        path.read_text(encoding="utf-8").lower()
+        for path in (ROOT / "src/autoqe/extraction").rglob("*.py")
+    ]
     assert not any("import playwright" in source or "import httpx" in source for source in sources)
     assert not any("agentguard" in source for source in sources)
 

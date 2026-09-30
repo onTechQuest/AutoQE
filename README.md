@@ -38,3 +38,14 @@ M2 adds bounded, offline risk-based TestSpec planning from a validated Behaviora
 ```
 
 See [M2 risk-based planning](docs/M2_RISK_BASED_PLANNING.md). Planning does not execute tests.
+
+M3 adds deterministic, loopback-only Playwright/httpx execution against the pinned RWA. See [M3 execution providers](docs/M3_EXECUTION_PROVIDERS.md). Execution requires the seeded test password through `RWA_TEST_PASSWORD` and the process-scoped loopback preload described there.
+
+The M3 CLI executes exactly one TestSpec and writes normalized evidence under `reports/executions/`:
+
+```powershell
+.venv/Scripts/python.exe scripts/execute_testspec.py `
+	--project-profile examples/rwa/project-profile.json `
+	--test-spec reports/plans/contract-payment-valid-001/testspec-02-contract-payment-valid-001-negative.json `
+	--provider api
+```

@@ -7,7 +7,7 @@ name = "autoqe"
 version = "0.1.0"
 description = "Vendor-neutral Quality Engineering orchestration contracts"
 requires-python = ">=3.13"
-dependencies = ["pydantic>=2.10,<3"]
+dependencies = ["pydantic>=2.10,<3", "httpx>=0.28,<1", "playwright==1.63.0"]
 
 [project.optional-dependencies]
 test = ["pytest>=8,<9"]
