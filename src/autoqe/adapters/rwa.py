@@ -13,7 +13,8 @@ from playwright.sync_api import Locator, Page
 
 from autoqe.contracts.project_profile import NetworkScope, ProjectProfile
 from autoqe.contracts.test_spec import TestSpec
-from autoqe.execution.runtime import ExecutionSetup
+from autoqe.execution.runtime import ExecutionSetup, ExecutionSetupError
+from autoqe.contracts.execution_record import FailureCategory
 
 RWA_REVISION = "9dfcb9869533ce8a8963c556facc0d80457f9d39"
 _LOOPBACK_HOSTS = {"localhost", "127.0.0.1", "::1"}
@@ -46,8 +47,11 @@ class RwaProjectAdapter:
         rwa_root: str | Path = r"C:\Projects\autoqe-reference-rwa",
         timeout_seconds: float = 8.0,
         http_client_factory: Callable[..., httpx.Client] = httpx.Client,
+        reference_root: str | Path | None = None,
     ) -> None:
         self.rwa_root = Path(rwa_root).resolve()
+        # Source identity and deployed runtime data can live in separate directories.
+        self.reference_root = Path(reference_root).resolve() if reference_root else self.rwa_root
         self.timeout_seconds = timeout_seconds
         self._http_client_factory = http_client_factory
         self._actors: RwaTestActors | None = None
@@ -65,17 +69,30 @@ class RwaProjectAdapter:
     def prepare_execution(self, test_spec: TestSpec, profile: ProjectProfile) -> ExecutionSetup:
         from autoqe.execution.actions import RwaOperation, RwaSemanticActionResolver
 
-        checkout = self.verify_reference_checkout(profile)
-        ready = self.verify_ready(profile)
-        self.authenticate_if_needed(profile)
-        reset = self.reset_environment(profile)
+        evidence: dict[str, str] = {}
+        def stage(name, operation, category):
+            try:
+                result = operation()
+            except Exception as exc:
+                evidence[name] = "FAILED"
+                evidence["setup_stage"] = name
+                failure = FailureCategory.ENVIRONMENT_FAILURE if isinstance(exc, httpx.TransportError) else category
+                raise ExecutionSetupError(failure, evidence) from None
+            evidence.update(result)
+            evidence[name] = "PASSED"
+            return result
+        stage("reference_status", lambda: self.verify_reference_checkout(profile), FailureCategory.ENVIRONMENT_FAILURE)
+        stage("readiness_status", lambda: self.verify_ready(profile), FailureCategory.ENVIRONMENT_FAILURE)
+        stage("authentication_setup_status", lambda: self.authenticate_if_needed(profile), FailureCategory.ENVIRONMENT_FAILURE)
+        reset = stage("reset_status", lambda: self.reset_environment(profile), FailureCategory.DATA_FAILURE)
         resolver = RwaSemanticActionResolver()
         operations = [resolver.resolve(step).operation for step in test_spec.steps]
         requirements = tuple(test_spec.test_data_requirements)
         if RwaOperation.ASSERT_TRANSACTION_VISIBLE in operations:
             requirements += ("rwa.history.baseline",)
-        setup = self.setup_test_data(profile, requirements)
-        return ExecutionSetup({**checkout, **ready, **setup}, reset.get("reset_identity"))
+        stage("fixture_status", lambda: self.setup_test_data(profile, requirements), FailureCategory.DATA_FAILURE)
+        evidence["setup_status"] = "PASSED"
+        return ExecutionSetup(evidence, reset.get("reset_identity"))
 
     def payment_row(self, page: Page, description: str) -> Locator:
         return page.locator('[data-test^="transaction-item-"]').filter(
@@ -106,7 +123,7 @@ class RwaProjectAdapter:
     def verify_reference_checkout(self, project_profile: ProjectProfile) -> Mapping[str, str]:
         self._urls(project_profile)
         revision = subprocess.run(
-            ["git", "-C", str(self.rwa_root), "rev-parse", "HEAD"],
+            ["git", "-C", str(self.reference_root), "rev-parse", "HEAD"],
             check=True,
             capture_output=True,
             text=True,
@@ -115,7 +132,7 @@ class RwaProjectAdapter:
         if revision != RWA_REVISION:
             raise ValueError("RWA checkout revision does not match the M1-qualified commit")
         status = subprocess.run(
-            ["git", "-C", str(self.rwa_root), "diff", "--name-only", "HEAD"],
+            ["git", "-C", str(self.reference_root), "diff", "--name-only", "HEAD"],
             check=True,
             capture_output=True,
             text=True,

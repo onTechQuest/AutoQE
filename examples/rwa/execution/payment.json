@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "record_id": "5556cd60-5b44-59b5-89d4-817de1745b54",
+  "created_at": "2026-09-30T12:10:00Z",
+  "source_ids": [
+    "md-examples-rwa-requirements-payments"
+  ],
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+  },
+  "correlation_id": "f1024be0-a039-442f-a686-450d14f98876",
+  "producer": "autoqe-planner",
+  "producer_version": "0.2.0",
+  "limitations": [
+    "Approved offline M1 replay; no model was called.",
+    "Unresolved contract unknown: Insufficient-funds handling, fees, and payment limits are not specified.",
+    "No explicit numeric/comparative boundary was specified; no boundary TestSpec was planned."
+  ],
+  "test_id": "contract-payment-valid-001-positive",
+  "project_id": "cypress-rwa",
+  "contract_id": "contract-payment-valid-001",
+  "requirement_ids": [
+    "REQ-PAY-001"
+  ],
+  "title": "Submit a valid payment (positive)",
+  "intent": "A valid payment is recorded once after submission.; A successful payment is reflected in sender and recipient account state.",
+  "risk_level": "HIGH",
+  "priority": 2,
+  "test_layer": "BOTH",
+  "scenario_type": "POSITIVE",
+  "preconditions": [
+    "The sender is authenticated."
+  ],
+  "test_data_requirements": [
+    "The sender is authenticated.",
+    "The recipient is eligible to receive a payment.",
+    "The payment amount is positive."
+  ],
+  "steps": [
+    {
+      "step_id": "pay-positive-1",
+      "action": "AUTHENTICATE",
+      "target": "sender",
+      "value": null,
+      "data_ref": null
+    },
+    {
+      "step_id": "pay-positive-2",
+      "action": "SELECT_ENTITY",
+      "target": "eligible recipient",
+      "value": null,
+      "data_ref": null
+    },
+    {
+      "step_id": "pay-positive-3",
+      "action": "ENTER_VALUE",
+      "target": "positive payment amount",
+      "value": null,
+      "data_ref": "payment-amount"
+    },
+    {
+      "step_id": "pay-positive-4",
+      "action": "SUBMIT",
+      "target": "valid payment",
+      "value": null,
+      "data_ref": null
+    },
+    {
+      "step_id": "pay-positive-5",
+      "action": "ASSERT",
+      "target": "resulting account state",
+      "value": null,
+      "data_ref": null
+    }
+  ],
+  "expected_outcomes": [
+    {
+      "outcome_id": "payment-recorded-once",
+      "description": "A valid payment is recorded once after submission."
+    },
+    {
+      "outcome_id": "payment-reflected",
+      "description": "A successful payment is reflected in sender and recipient account state."
+    }
+  ],
+  "evidence_requirements": [
+    {
+      "evidence_type": "VISIBLE_UI_STATE",
+      "description": "Capture the user-visible state relevant to the selected contract outcomes.",
+      "availability": "AVAILABLE"
+    },
+    {
+      "evidence_type": "API_RESULT_METADATA",
+      "description": "Capture sanitized result/status metadata relevant to the selected contract outcomes.",
+      "availability": "AVAILABLE"
+    }
+  ],
+  "cleanup_requirements": [
+    "Restore or remove test data through the future ProjectAdapter after execution; M2 performs no cleanup."
+  ],
+  "tags": [
+    "autoqe-m2",
+    "positive"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "revision": "9dfcb9869533ce8a8963c556facc0d80457f9d39",
+  "profiles": [
+    {
+      "id": "missing-recipient-default",
+      "purpose": "A missing required recipient is incorrectly defaulted to the requesting user, allowing an invalid payment to persist.",
+      "file": "backend/transaction-routes.ts",
+      "before": "  validateMiddleware(isTransactionPayloadValidator),",
+      "after": "  (req, _res, next) => { req.body.receiverId ??= req.user?.id; next(); },\n  validateMiddleware(isTransactionPayloadValidator),",
+      "test_spec": "examples/rwa/execution/invalid-payment.json",
+      "expected_classification": "PRODUCT_DEFECT",
+      "cleanup": "Stop the target, unlink shared dependencies, and remove the disposable worktree."
+    },
+    {
+      "id": "payment-unit-conversion",
+      "purpose": "A currency unit conversion regression records a tenth of the submitted payment amount.",
+      "file": "backend/database.ts",
+      "before": "    amount: transactionDetails.amount * 100,",
+      "after": "    amount: transactionDetails.amount * 10,",
+      "test_spec": "examples/rwa/execution/payment.json",
+      "expected_classification": "PRODUCT_DEFECT",
+      "cleanup": "Stop the target, unlink shared dependencies, and remove the disposable worktree."
+    },
+    {
+      "id": "payment-completion-state",
+      "purpose": "The completion update leaves a successfully submitted payment pending instead of complete.",
+      "file": "backend/database.ts",
+      "before": "    updateTransactionById(transaction.id, {\n      status: TransactionStatus.complete,\n    });",
+      "after": "    updateTransactionById(transaction.id, {\n      status: TransactionStatus.pending,\n    });",
+      "test_spec": "examples/rwa/execution/payment.json",
+      "expected_classification": "PRODUCT_DEFECT",
+      "cleanup": "Stop the target, unlink shared dependencies, and remove the disposable worktree."
+    }
+  ]
+}

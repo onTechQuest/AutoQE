@@ -88,6 +88,8 @@ class ApiExecutionProvider:
             completed_status = False
             payment_properties = False
             transaction_id = None
+            payment_observation: dict[str, object] = {}
+            invalid_observation = "Invalid payment was not evaluated."
 
             with httpx.Client(base_url=api_base, timeout=self.project_adapter.timeout_seconds, trust_env=False) as client:
                 for step in test_spec.steps:
@@ -136,6 +138,7 @@ class ApiExecutionProvider:
                         payment_properties = self._payment_properties_match(
                             after, recipient_transactions, actors, amount, transaction_id
                         )
+                        payment_observation = self._payment_observation(after, recipient_transactions, actors, amount, transaction_id)
                         completed_status = any(item.get("status") == "complete" for item in after)
                         created_fingerprint = hashlib.sha256(transaction_id.encode("utf-8")).hexdigest()
                         http_events.append(
@@ -162,6 +165,10 @@ class ApiExecutionProvider:
                         after = self._matching_transactions(client, project_profile, description or "")
                         if len(after) != len(before):
                             invalid_rejected = False
+                        invalid_observation = (
+                            f"API status={response.status_code}; matching transactions before={len(before)}, "
+                            f"after={len(after)}; expected rejection status=422 and no created transaction."
+                        )
                         http_events.append(
                             {
                                 "operation": "reject_invalid_payment",
@@ -182,6 +189,7 @@ class ApiExecutionProvider:
                         payment_properties = self._payment_properties_match(
                             matching, recipient_transactions, actors, amount, transaction_id
                         )
+                        payment_observation = self._payment_observation(matching, recipient_transactions, actors, amount, transaction_id)
                         http_events.append({"operation": "observe_recorded_state", "status": "OBSERVED" if completed_status else "MISSING"})
                     elif action.operation == RwaOperation.ASSERT_NO_TRANSACTION:
                         passed = invalid_rejected and not self._matching_transactions(
@@ -192,7 +200,7 @@ class ApiExecutionProvider:
                                 assertion_id="invalid-payment-not-recorded",
                                 status=ResultStatus.PASSED if passed else ResultStatus.FAILED,
                                 expected=next(item.description for item in test_spec.expected_outcomes if item.outcome_id == "invalid-payment-not-recorded"),
-                                observed="The API rejected the invalid payload and no matching transaction exists." if passed else "The rejection/status or resulting state did not match the expected outcome.",
+                                observed=invalid_observation,
                             )
                         )
                     elif action.operation == RwaOperation.ASSERT_PAYMENT_OUTCOME:
@@ -210,10 +218,10 @@ class ApiExecutionProvider:
                                     assertion_id=outcome.outcome_id,
                                     status=ResultStatus.PASSED if passed else ResultStatus.FAILED,
                                     expected=outcome.description,
-                                    observed="Both participant histories contain the same payment with the submitted amount, correct actors, and complete state." if passed else "Payment count, amount, actors, identity, or complete state did not match.",
+                                    observed=json.dumps(payment_observation, sort_keys=True),
                                 )
                             )
-                            http_events.append({"operation": "assert_payment_properties", "outcome_id": outcome.outcome_id, "passed": passed})
+                            http_events.append({"operation": "assert_payment_properties", "outcome_id": outcome.outcome_id, "passed": passed, "measurements": payment_observation})
                     elif action.operation == RwaOperation.ASSERT_TRANSACTION_VISIBLE:
                         visible = self._actor_sees_transaction(
                             client,
@@ -265,6 +273,8 @@ class ApiExecutionProvider:
                 step_results.append(StepResult(step_id=failed_step.step_id, status=ResultStatus.ERROR, observed="Provider could not complete this semantic action."))
             evidence_refs = self._write_safe_evidence(execution_id, test_spec, http_events)
 
+        for assertion in assertions:
+            assertion.evidence_refs = list(evidence_refs)
         return make_execution_record(
             test_spec,
             project_profile,
@@ -316,6 +326,27 @@ class ApiExecutionProvider:
         result = self._matching_transactions(client, profile, description)
         self._login(client, profile, actors.sender_username)
         return result
+
+    @staticmethod
+    def _payment_observation(sender_records, recipient_records, actors, amount, transaction_id) -> dict[str, object]:
+        def selected(records):
+            return {
+                "count": len(records),
+                "transactions": [
+                    {
+                        "identity_sha256": hashlib.sha256(str(item.get("id", "")).encode()).hexdigest(),
+                        "identity_matches": item.get("id") == transaction_id,
+                        "amount_minor": item.get("amount") if isinstance(item.get("amount"), (int, float)) else None,
+                        "state": item.get("status") if item.get("status") in {"complete", "pending"} else "UNRECOGNIZED",
+                        "sender_matches": item.get("senderId") == actors.sender_id,
+                        "recipient_matches": item.get("receiverId") == actors.recipient_id,
+                        "is_payment": not item.get("requestStatus"),
+                    } for item in records[:2]
+                ],
+            }
+        return {"expected_amount_minor": amount * 100 if amount is not None else None,
+                "expected_state": "complete", "sender_view": selected(sender_records),
+                "recipient_view": selected(recipient_records)}
 
     @staticmethod
     def _payment_properties_match(sender_records, recipient_records, actors, amount, transaction_id) -> bool:
@@ -373,6 +404,7 @@ class ApiExecutionProvider:
             EvidenceReference(
                 kind="API_RESULT_METADATA",
                 uri=evidence_uri(output_path, self.repository_root),
+                sha256=hashlib.sha256(output_path.read_bytes()).hexdigest(),
                 description="Sanitized API status and assertion metadata; no request/response bodies or headers.",
             )
         ]

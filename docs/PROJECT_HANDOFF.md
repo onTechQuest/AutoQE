@@ -18,11 +18,13 @@ C:\Projects\AutoQE
 
 Current completed implementation through:
 
-M3 - Deterministic Execution Providers
+M4 - Controlled Faults, Evidence, and Triage (working tree; not committed)
 
 Current M3 commit:
 
 683e997
+
+Pre-M4 hardening checkpoint: `29eadfa`.
 
 ### Reference Application
 
@@ -99,7 +101,9 @@ RwaProjectAdapter
     v
 ExecutionRecord
 
-Triage is defined in the M0 contract but is not yet implemented as runtime intelligence.
+M4 adds deterministic runtime triage from TestSpec and ExecutionRecord evidence,
+using the frozen TriageRecord. The external qualification controller is outside
+the implemented decision path and never supplies fault identity to AutoQE.
 
 ## Architectural Principles
 
@@ -418,7 +422,7 @@ clean
 
 ## Pre-M4 Execution Hardening Checkpoint
 
-Status: COMPLETE in the working tree; not committed. This is not M4.
+Status: COMPLETE, committed as `29eadfa`. This checkpoint preceded M4.
 
 The core execution service now uses internal `ExecutionSetupAdapter` and
 `CheckedExecutionProvider` protocols. The frozen M0 contracts, interfaces, and
@@ -469,40 +473,94 @@ Verification:
 - Live model calls: zero. No real credential was persisted; synthetic transport
   tests verify credentials are absent from normalized records and API evidence.
 
-The historical M3 3/3 UI, API, and BOTH qualifications above were not rerun during
-this checkpoint. Provider hardening was verified offline with synthetic transport
-and browser doubles. No reference application fault was injected, no runtime
-triage was implemented, and M4 remains unstarted.
+The initial hardening checkpoint used offline transport/browser doubles. A
+subsequent real runtime requalification passed 3/3 UI history, 3/3 API invalid
+payment, and 3/3 BOTH payment runs, including the strengthened assertions.
+No fault injection or runtime triage was performed during that checkpoint.
 
-## Next Milestone
+## M4 - Controlled Faults, Evidence, and Triage
 
-M4 - Controlled Faults, Evidence, and Triage
+Status: COMPLETE in the working tree; not committed.
 
-Intent:
+Architecture and commands: [M4 controlled faults and triage](M4_CONTROLLED_FAULTS_AND_TRIAGE.md).
 
-Prove that AutoQE can execute the same TestSpecs against healthy and deliberately faulty versions of the reference application, detect meaningful behavioral failures, preserve evidence, and classify failures without knowing which fault was injected.
+Runtime triage is a project-agnostic deterministic service under `autoqe.triage`.
+`scripts/triage_execution.py` accepts only normal project, test, and execution
+artifacts. It uses the unchanged M0 TriageRecord, retains evidence references,
+and explains decisions without model calls or confidence scores.
 
-Planned failure classifications already defined by the M0 contract:
+Explicit setup evidence distinguishes readiness/transport failures from reset or
+fixture failures. Product classification requires supported semantics, successful
+setup, target submission, and concrete failed assertions with hashed evidence.
+Opaque provider/locator failures remain UNKNOWN. TEST_DEFECT is limited to an
+established test/reporting artifact inconsistency. Healthy records receive UNKNOWN
+with a no-observed-failure rationale, because M0 has no healthy classification.
 
-- PRODUCT_DEFECT
-- TEST_DEFECT
-- ENVIRONMENT_FAILURE
-- DATA_FAILURE
-- UNSUPPORTED_BEHAVIOR
-- UNKNOWN
+The controller in `qualification/m4/` creates detached disposable worktrees at the
+same pinned RWA revision, applies at most one registered exact patch per target,
+and removes each worktree after execution. A temporary dependency junction is
+unlinked before cleanup. The canonical checkout is never the running target.
+The adapter verifies canonical source identity separately from deployed seed/data.
 
-M4 should use a small bounded set of deterministic hidden fault profiles.
+Fault identity is external to AutoQE. Execution and triage run in separate fresh
+processes with ordinary artifact arguments, opaque directory identifiers, and
+allowlisted environments. Neither runtime service imports the controller or reads
+fault definitions. Only the external qualification report joins expected fault
+labels with actual results after triage. No Cypress test source was used.
 
-Potential fault domains include:
+Real healthy-versus-faulty qualification at the pinned revision:
 
-- payment validation
-- authorization / ownership
-- transaction amount or state
-- input validation
+| Controlled product regression | Healthy | Same TestSpec, faulty | Triage |
+|---|---|---|---|
+| Missing recipient incorrectly defaults to requesting user | PASSED | FAILED: invalid payment persisted | PRODUCT_DEFECT |
+| Payment amount uses incorrect unit conversion | PASSED | FAILED: 350 observed versus 3500 expected minor units | PRODUCT_DEFECT |
+| Payment completion update leaves pending state | PASSED | FAILED: pending observed versus complete expected | PRODUCT_DEFECT |
 
-The active fault identity must not be exposed to AutoQE planning or triage logic.
+Healthy/faulty TestSpec SHA-256 values matched within every pair. Product faults
+attempted: 3; detected: 3; healthy baselines passed: 3; faulty runs incorrectly
+passed: 0. These are bounded factual counts, not an AI score or release gate.
 
-M4 must not begin until explicitly authorized.
+Non-product qualification:
+
+- Stopped local service: ERROR / ENVIRONMENT_FAILURE.
+- Disposable target seed fingerprint mismatch: ERROR / DATA_FAILURE.
+- Valid unsupported semantics: SKIPPED / UNSUPPORTED_BEHAVIOR.
+- Explicitly synthetic insufficient evidence: UNKNOWN.
+- Explicitly synthetic assertion-definition inconsistency: TEST_DEFECT.
+
+All expected classifications matched. The latter two are evidence fixtures,
+not claims of observed application defects.
+
+Verification:
+
+- Focused M4 plus execution/hardening tests: 160 passed.
+- One final complete AutoQE suite: 221 passed.
+- Real qualification: PASS; ignored report at
+  `reports/m4-qualification-20260930/qualification.json`.
+- Runtime evidence: 29 JSON artifacts and 13 screenshots; 19 unique evidence
+  references resolved, with all supplied hashes verified. Credential, private-key,
+  raw-payload-key, and fault-identity audits passed for runtime artifacts.
+- Observed listeners: frontend `[::1]:3000`, API `127.0.0.1:3001` only.
+- Final listeners: none on ports 3000/3001.
+- All temporary worktrees removed; only the canonical RWA worktree remains.
+- Canonical RWA clean at `9dfcb9869533ce8a8963c556facc0d80457f9d39`.
+- AgentGuard clean and unchanged; no integration added.
+- Live model calls: zero. Runtime credentials were not persisted or printed.
+- Frozen M0 contracts/interfaces/schemas unchanged; `git diff --check` passed.
+
+Remaining limitations: the controller currently targets Windows with existing
+Node/Yarn dependencies. Process/input separation is an architectural information
+boundary, not an OS sandbox against malicious worker code. Triage trusts normalized
+provider evidence and does not infer component-level root cause or interpret
+screenshots. UI-interrupted outcomes can remain unresolved; the controlled product
+classifications are supported by concrete API assertions. TEST_DEFECT qualification
+covers artifact inconsistency only. The three faults do not establish broad defect
+coverage, authorization correctness, or production readiness.
+
+## Next Milestone Boundary
+
+M5 is not started. AgentGuard integration and M5 metrics infrastructure remain
+outside this checkpoint and require a separate authorized scope.
 
 ## Deferred / V2 Capabilities
 

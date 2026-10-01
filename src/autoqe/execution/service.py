@@ -12,7 +12,7 @@ from autoqe.contracts.execution_record import (
 from autoqe.contracts.project_profile import ProjectProfile
 from autoqe.contracts.test_spec import TestLayer, TestSpec
 from autoqe.execution.records import make_execution_record, validate_completeness
-from autoqe.execution.runtime import CheckedExecutionProvider, ExecutionSetupAdapter
+from autoqe.execution.runtime import CheckedExecutionProvider, ExecutionSetupAdapter, ExecutionSetupError
 
 
 class UnsupportedExecutionProviderError(ValueError):
@@ -131,8 +131,7 @@ def _execute_single_provider(
     started_clock = perf_counter()
     errors = provider.capability_errors(test_spec)
     if errors or not provider.supports(test_spec):
-        return (
-            make_execution_record(
+        record = make_execution_record(
                 test_spec,
                 project_profile,
                 provider.provider_name,
@@ -142,17 +141,20 @@ def _execute_single_provider(
                 started_clock,
                 observed_outcomes=list(errors) or ["Execution provider does not support the requested TestSpec."],
                 failure_category=FailureCategory.UNSUPPORTED_BEHAVIOR,
-            ),
-            None,
-        )
+            )
+        record.environment_identity["capability_status"] = "UNSUPPORTED"
+        return record, None
     try:
         setup = project_adapter.prepare_execution(test_spec, project_profile)
         record = provider.execute(test_spec, project_profile)
         record.environment_identity.update(setup.environment_identity)
+        record.environment_identity["capability_status"] = "PASSED"
         record.test_data_reset_identity = setup.reset_identity
         return validate_completeness(test_spec, record), setup.reset_identity
     except Exception as exc:
-        category = FailureCategory.ENVIRONMENT_FAILURE if isinstance(exc, OSError) else FailureCategory.PROVIDER_ERROR
+        category = exc.category if isinstance(exc, ExecutionSetupError) else (
+            FailureCategory.ENVIRONMENT_FAILURE if isinstance(exc, OSError) else FailureCategory.PROVIDER_ERROR
+        )
         record = make_execution_record(
             test_spec,
             project_profile,
@@ -164,6 +166,9 @@ def _execute_single_provider(
             observed_outcomes=[f"Project setup or provider failed with {type(exc).__name__}."],
             failure_category=category,
         )
+        record.environment_identity["capability_status"] = "PASSED"
+        if isinstance(exc, ExecutionSetupError):
+            record.environment_identity.update(exc.evidence)
         return record, None
 
 

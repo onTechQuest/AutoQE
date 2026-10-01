@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Mapping, Protocol
 
 from autoqe.contracts.project_profile import ProjectProfile
+from autoqe.contracts.execution_record import FailureCategory
 from autoqe.contracts.test_spec import TestLayer, TestSpec
 from autoqe.interfaces.execution_provider import ExecutionProvider
 
@@ -12,6 +13,15 @@ from autoqe.interfaces.execution_provider import ExecutionProvider
 class ExecutionSetup:
     environment_identity: Mapping[str, str]
     reset_identity: str | None
+
+
+class ExecutionSetupError(RuntimeError):
+    """Sanitized stage evidence from setup; never stores the underlying payload."""
+
+    def __init__(self, category: FailureCategory, evidence: Mapping[str, str]) -> None:
+        super().__init__("Execution setup did not complete.")
+        self.category = category
+        self.evidence = dict(evidence)
 
 
 class ExecutionSetupAdapter(Protocol):

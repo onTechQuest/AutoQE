@@ -23,7 +23,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--test-spec", type=Path, required=True)
     parser.add_argument("--provider", choices=("playwright", "api"), required=True)
     parser.add_argument("--rwa-root", type=Path, default=Path(r"C:\Projects\autoqe-reference-rwa"))
+    parser.add_argument("--reference-root", type=Path, help="Clean reference source checkout when runtime data is deployed separately.")
     parser.add_argument("--output", type=Path, default=Path("reports/executions"))
+    parser.add_argument("--evidence-output", type=Path, help="Directory for sanitized execution evidence.")
     return parser
 
 
@@ -36,16 +38,16 @@ def main() -> int:
     try:
         project_profile = ProjectProfile.model_validate_json(args.project_profile.read_text(encoding="utf-8"))
         test_spec = TestSpec.model_validate_json(args.test_spec.read_text(encoding="utf-8"))
-        project_adapter = RwaProjectAdapter(args.rwa_root)
+        project_adapter = RwaProjectAdapter(args.rwa_root, reference_root=args.reference_root)
         if test_spec.test_layer == TestLayer.BOTH:
             provider = (
-                PlaywrightExecutionProvider(project_adapter),
-                ApiExecutionProvider(project_adapter),
+                PlaywrightExecutionProvider(project_adapter, evidence_root=args.evidence_output),
+                ApiExecutionProvider(project_adapter, evidence_root=args.evidence_output),
             )
         elif args.provider == "playwright":
-            provider = PlaywrightExecutionProvider(project_adapter)
+            provider = PlaywrightExecutionProvider(project_adapter, evidence_root=args.evidence_output)
         else:
-            provider = ApiExecutionProvider(project_adapter)
+            provider = ApiExecutionProvider(project_adapter, evidence_root=args.evidence_output)
 
         record = execute_test_spec(
             test_spec,
