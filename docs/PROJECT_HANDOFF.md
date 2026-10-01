@@ -18,7 +18,8 @@ C:\Projects\AutoQE
 
 Current completed implementation through:
 
-M4 - Controlled Faults, Evidence, and Triage (working tree; not committed)
+M5 - Quality Metrics (qualified in the working tree; not committed).
+The preceding M4 checkpoint is committed as `d7ce21b`.
 
 Current M3 commit:
 
@@ -480,7 +481,7 @@ No fault injection or runtime triage was performed during that checkpoint.
 
 ## M4 - Controlled Faults, Evidence, and Triage
 
-Status: COMPLETE in the working tree; not committed.
+Status: COMPLETE, committed as `d7ce21b`.
 
 Architecture and commands: [M4 controlled faults and triage](M4_CONTROLLED_FAULTS_AND_TRIAGE.md).
 
@@ -557,10 +558,98 @@ classifications are supported by concrete API assertions. TEST_DEFECT qualificat
 covers artifact inconsistency only. The three faults do not establish broad defect
 coverage, authorization correctness, or production readiness.
 
+## M5 - Quality Metrics
+
+Status: COMPLETE in the working tree; not committed. Qualified 2026-10-01.
+
+Architecture: explicit versioned `MetricsManifest` -> validated
+`MetricsEvidenceBundle` -> nine independent calculators -> deterministic
+`QualityMetricsReport` JSON and concise CLI. All new reporting models live under
+`src/autoqe/metrics`, outside frozen M0 contracts. There are no reverse imports
+from extraction, planning, execution, adapters or triage. External fault labels
+are consumed after execution only. No aggregate score, release gate, thresholds,
+dashboard, live model dependency or AgentGuard integration was added.
+
+Design, input rules and commands: [M5 quality metrics](M5_QUALITY_METRICS.md).
+
+Exact definitions and real saved M4 window results:
+
+| Metric | Definition | Result |
+|---|---|---|
+| Requirement traceability | Unique requirement IDs explicitly referenced by valid evaluated TestSpecs / unique IDs in selected contracts | 1/1; REQ-PAY-001, no uncovered IDs |
+| TestSpec schema validity | Valid selected TestSpec inputs / all selected inputs, including malformed JSON | 3/3; positive, negative, unsupported variant |
+| Executability | Runtime attempts with supported capability, successful setup, meaningful execution, valid completed PASSED/assertion-FAILED records and all final expected outcomes resolved / runtime attempts | 6/9; environment, data setup and unsupported cases excluded from numerator |
+| Healthy false-positive rate | Incorrect assertion/product/test failure signals / externally healthy cases with successful setup and supported semantics | 0/3 |
+| Controlled-defect detection | Fault attempts with observed, referenced assertion mismatch after successful setup and meaningful execution / controlled fault attempts | 3/3; zero missed; zero faulty runs passed |
+| Triage accuracy | Actual classification matching external expected label / externally labeled cases, including missing triage as incorrect | 8/8 |
+| Task completion | Cases producing all explicitly required valid artifacts/terminal results / evaluation cases attempted | 11/11; no incomplete stages |
+| AI usage | Actual live token count, or explicit corroborated no-live/replay-or-deterministic-only attestation | 0 live calls, 0 live tokens for this runtime window |
+| AgentGuard pass rate | Independent evaluation passes / evaluations | UNAVAILABLE: M6 integration and evaluation dataset/results do not exist |
+
+Counting distinctions: the schema denominator is three input artifacts, not nine
+runtime attempts. Accuracy covers three product faults and one each environment,
+data, unsupported, unknown and test-defect label. UNKNOWN and TEST_DEFECT are
+synthetic triage-only cases, excluded from runtime executability. Healthy baseline
+triage records have no external expected label and are excluded from accuracy.
+Task completion covers nine runtime pipelines plus two explicitly triage-only
+synthetic tasks. A product FAILED result and valid terminal ERROR/SKIPPED result
+may complete an artifact pipeline; INCOMPLETE does not complete an execution
+stage. Completion does not imply correctness.
+
+Availability distinguishes AVAILABLE (including observed zero), NOT_APPLICABLE
+(empty eligible ratio denominator, null value and explicit reason), and
+UNAVAILABLE (missing telemetry or capability, null value). Malformed TestSpecs
+remain in the schema denominator with safe diagnostic categories and hashes;
+other malformed artifacts, missing referenced files, duplicate case identities,
+inconsistent evidence and mixed projects fail clearly. Optional missing stage
+references are incomplete tasks, not missing-file errors. Generic artifact sets
+without usage evidence remain UNAVAILABLE; no token estimates are made.
+
+Qualification and verification:
+
+- Deterministic committed synthetic fixture: `examples/metrics/manifest.json`;
+  report at ignored `reports/m5-fixture/quality-metrics.json`. Traceability 1/2
+  explicitly leaves REQ-DELETE uncovered; empty healthy sample is NOT_APPLICABLE.
+- Actual saved M4 integration: ignored `reports/m5-integration/manifest.json`
+  and `reports/m5-integration/result/quality-metrics.json`. No RWA restart or
+  additional fault injection was needed. Values above came from saved artifacts,
+  not constants. Paired TestSpec hashes and summary counts were corroborated.
+- All 19 referenced M4 evidence files existed and matched their supplied hashes.
+  Report serialization was byte-stable across independent loads; privacy checks
+  passed and no credentials were read, printed or persisted by M5.
+- Focused metrics tests: 58 passed. Metrics plus corrected dependency-boundary
+  tests: 73 passed.
+- Fresh-checkout-style copy, without `.git` or pre-existing reports: 58 metrics
+  tests and the fixture reporting CLI passed using only copied committed/new
+  source and fixtures plus the existing interpreter/dependencies.
+- Final full suite: 279 passed. The first milestone-close full run found one
+  legacy test that banned the word AgentGuard anywhere in source (278 passed,
+  one failed). It was corrected to enforce static/dynamic import and packaging
+  dependency boundaries while allowing M5's required unavailable metric text.
+  Focused verification and the final complete rerun then passed. No runtime or
+  frozen M0 contract changes were made for this correction.
+- RWA remained clean at `9dfcb9869533ce8a8963c556facc0d80457f9d39`.
+  AgentGuard remained clean and unchanged at
+  `ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`.
+- Ports 3000/3001 had no listeners before or after M5; live model calls: zero.
+  Reports and fresh-checkout output are ignored. Frozen M0 contracts/interfaces/
+  schemas are unchanged; `git diff --check` passed. No commit was made.
+
+Limitations: one payment requirement and three controlled faults cannot establish
+broad behavioral coverage or statistical significance. External labels and usage
+attestations are trusted qualification evidence; hashes identify bytes rather
+than prove independent truth. Calculators use normalized observations and do not
+interpret screenshots or implicitly read referenced evidence files. Composite
+final outcomes may be resolved by another provider after one provider stops.
+Concrete fault detection and complete executability are deliberately separate:
+a supported observed mismatch may detect a fault while other outcomes remain
+unresolved. AgentGuard pass rate remains unavailable until M6. Historical runtime
+reports are intentionally not fresh-checkout dependencies.
+
 ## Next Milestone Boundary
 
-M5 is not started. AgentGuard integration and M5 metrics infrastructure remain
-outside this checkpoint and require a separate authorized scope.
+M5 implementation adds observational metrics only. M6 is not started.
+AgentGuard integration and release decisions remain outside this scope.
 
 ## Deferred / V2 Capabilities
 

@@ -2,7 +2,7 @@
 
 AutoQE is a vendor-neutral autonomous Quality Engineering orchestration framework that converts product intent and change context into risk-based executable test specifications, delegates execution to existing testing ecosystems, analyzes evidence, and can be independently evaluated by AgentGuard.
 
-**AutoQE v1 is an MVP implemented through M4.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, and evidence-based triage qualified against isolated controlled faults.
+**AutoQE v1 is an MVP implemented through M5.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, evidence-based triage qualified against isolated controlled faults, and observational quality metrics.
 
 The primary reference target is the [Cypress Real World App](https://github.com/cypress-io/cypress-realworld-app), pinned for qualification at `9dfcb9869533ce8a8963c556facc0d80457f9d39`. Its existing Cypress tests remain independent benchmark/oracle evidence and are not inputs to AutoQE generation.
 
@@ -54,3 +54,13 @@ M4 adds deterministic triage using the existing TriageRecord and an external
 qualification harness with three isolated product faults. Fault identity never
 enters execution or triage inputs. See [M4 controlled faults and triage](docs/M4_CONTROLLED_FAULTS_AND_TRIAGE.md)
 for the CLI, isolation boundary, evidence rules, and limitations.
+
+M5 computes deterministic, evidence-backed metrics after qualification, without
+affecting runtime behavior or making release decisions. AgentGuard evaluation
+remains unavailable until M6. See [M5 quality metrics](docs/M5_QUALITY_METRICS.md).
+
+```powershell
+.venv/Scripts/python.exe scripts/report_quality_metrics.py `
+    --evidence-manifest examples/metrics/manifest.json `
+    --output reports/metrics
+```

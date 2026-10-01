@@ -1,5 +1,7 @@
+import ast
 import json
 from pathlib import Path
+import tomllib
 
 import pytest
 from pydantic import ValidationError
@@ -155,4 +157,22 @@ def test_checked_in_schemas_are_versioned_and_closed() -> None:
 def test_agentguard_is_not_imported_as_an_autoe_core_dependency() -> None:
     source_files = list((ROOT / "src").rglob("*.py"))
     assert source_files
-    assert all("agentguard" not in path.read_text(encoding="utf-8").lower() for path in source_files)
+    # Reporting an unavailable metric may name the external evaluator. Enforce
+    # the dependency boundary, not a ban on descriptive strings and comments.
+    for path in source_files:
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        imports = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imports.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                imports.append(node.module or "")
+            elif isinstance(node, ast.Call) and node.args:
+                name = getattr(node.func, "id", getattr(node.func, "attr", ""))
+                if name in ("__import__", "import_module") and isinstance(node.args[0], ast.Constant):
+                    imports.append(str(node.args[0].value))
+        assert not any("agentguard" in name.lower().replace("_", "") for name in imports), path
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    dependencies = project.get("dependencies", [])
+    dependencies += [item for group in project.get("optional-dependencies", {}).values() for item in group]
+    assert not any("agentguard" in name.lower().replace("-", "").replace("_", "") for name in dependencies)

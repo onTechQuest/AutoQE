@@ -1,0 +1,37 @@
+{
+  "project_id": "metrics-example",
+  "test_id": "save-test",
+  "execution_id": "save-execution",
+  "provider": "synthetic-example",
+  "provider_version": "1",
+  "status": "FAILED",
+  "failure_category": "ASSERTION_FAILURE",
+  "started_at": "2026-01-01T00:00:00Z",
+  "completed_at": "2026-01-01T00:00:01Z",
+  "step_results": [
+    {
+      "step_id": "submit",
+      "status": "PASSED"
+    }
+  ],
+  "assertion_results": [
+    {
+      "assertion_id": "saved",
+      "status": "FAILED",
+      "expected": "Item is saved",
+      "observed": "Saved count is zero",
+      "evidence_refs": [
+        {
+          "kind": "SYNTHETIC_OBSERVATION",
+          "uri": "examples/metrics/qualification.json",
+          "sha256": "81ea3cf72e0ac9405914fa032c951e44d750b65129a2dbb62e8f78d6d94ba873"
+        }
+      ]
+    }
+  ],
+  "environment_identity": {
+    "capability_status": "PASSED",
+    "readiness_status": "PASSED",
+    "setup_status": "PASSED"
+  }
+}

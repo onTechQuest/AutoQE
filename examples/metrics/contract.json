@@ -1,0 +1,1 @@
+{"project_id":"metrics-example","contract_id":"save-contract","requirement_ids":["REQ-SAVE","REQ-DELETE"],"title":"Save an item","intent":"Persist an item","risk_level":"MEDIUM","expected_behaviors":[{"behavior_id":"saved","description":"Item is saved"}],"limitations":["Synthetic metrics fixture; not application qualification."]}

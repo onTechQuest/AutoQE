@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "project_id": "metrics-example",
+  "window_id": "synthetic-example",
+  "artifacts": {
+    "contract": {"kind": "contract", "path": "contract.json"},
+    "spec": {"kind": "spec", "path": "spec.json"},
+    "execution": {"kind": "execution", "path": "execution.json"},
+    "triage": {"kind": "triage", "path": "triage.json"},
+    "qualification": {"kind": "qualification", "path": "qualification.json"},
+    "usage": {"kind": "usage", "path": "usage.json"}
+  },
+  "cases": [{"case_id": "save-fault", "contract": "contract", "spec": "spec", "execution": "execution", "triage": "triage", "target_state": "CONTROLLED_FAULT", "expected_classification": "PRODUCT_DEFECT", "label_source": "qualification"}],
+  "checks": [{"source": "qualification", "pointer": "/live_model_calls", "expected": 0}],
+  "limitations": ["Entire window is synthetic, including the runtime-shaped case. Demonstrates calculators without invoking an application."]
+}
