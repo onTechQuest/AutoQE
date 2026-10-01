@@ -1,0 +1,375 @@
+{
+  "schema_version": "1.0",
+  "project_id": "cypress-rwa",
+  "window_id": "m6-m4-triage-qualification",
+  "cases": [
+    {
+      "evaluation_case_id": "54d8157b-87d1-529b-b8e5-db81e6ae6d8e",
+      "label_id": "01799979-f22b-538f-a5e3-ed14d25f3786",
+      "actual_value": "PRODUCT_DEFECT",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "8200a4b0831c47879eba862dfd0c14e3",
+          "sha256": "62dcbf0430c54b5b425c14881e6b640e636e5a5bd1c3d771510d2020c0feba21"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "1d1949d9407a4a8f9f5262f2e1ce0363",
+          "sha256": "9100e428b6bf78e23b1708edf45f99c622209c6e69bc119aa15126a5f74087be"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": [
+          "9bff13c88d104b2e0bbbf9c779622f9801d22f0ecc6ad63f24ebb7c17b1f86a5"
+        ]
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "9aeed2a8-e33d-5f90-b1d2-99d3626efe19",
+      "label_id": "ebf55761-b9ed-5152-9e9f-a7231b9a7380",
+      "actual_value": "PRODUCT_DEFECT",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-positive",
+          "sha256": "28f46e8f2a776523c0c38666ee92cecec3c8939dc6a509f1925760030afc0930"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "3fc304a251dc4807ab5345a41af1a9e6",
+          "sha256": "64a035030365a9fff23aa5bbbf99504f9c5dd8bed6d8736043844503fbd5a1fb"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "9c37be689ea64dc0b1d21b5d3eba72d6",
+          "sha256": "042f3acaef9df386c6e0d85e892ec265532d7f660768751410001f709b77b833"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": [
+          "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd"
+        ]
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "eef3589f-2a62-53bf-ad4b-bd9ae57cbf62",
+      "label_id": "b3d441ce-9c31-5a83-b461-5bc241320a42",
+      "actual_value": "PRODUCT_DEFECT",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-positive",
+          "sha256": "28f46e8f2a776523c0c38666ee92cecec3c8939dc6a509f1925760030afc0930"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "1587ce4fd6ef4a759137e0c348099de6",
+          "sha256": "58404b2325e4303355fdf8cd00c103a1516ba55a52c90b999866eb75d95cef2d"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "b98f43c871a9400b8518d764b9560687",
+          "sha256": "738361feba94b96ab9abe7a03d36804533efb40227c6f29cf56435266922d9ed"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": [
+          "a56c7c793912a2138122fa8c89f2a2cb5a6b625faa804ff52919b01c5c79ddd4"
+        ]
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "e67e225c-6800-5c67-adb1-9cd00782c633",
+      "label_id": "3ce450a9-02b5-5943-a4fe-d24c388c3939",
+      "actual_value": "ENVIRONMENT_FAILURE",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "f20c732bd47747dfb7c473f1b5959d97",
+          "sha256": "c46ee67d9a81a483fe208f1a4176c2b01b431f96bef177d35b6a2d1793a890de"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "c7e7df8b6fca475eac44e252d5d4ec9a",
+          "sha256": "cf126183fc65ef48672eb4e7ce0f4e027fd29870a3a6101fe5706447c8a07452"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": []
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "36a02c8c-35cc-5541-8051-db09e508ea86",
+      "label_id": "d82f56fb-a2d5-5717-974f-254726a7f6f4",
+      "actual_value": "DATA_FAILURE",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "c333eee7d07f4c05939ded2c38e991f3",
+          "sha256": "dc6eecb10fd3e89695f3deeee2d93da1246b411dff83a55c3ac0dfa0e598b8cb"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "495b829c33f14e98a168436553236b30",
+          "sha256": "16aab70e69a45d846933401b238f035525b5880bec37f8f4e9f5b4432d0c5773"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": []
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "00ffbd63-627b-582f-8b1f-e4948ec73c91",
+      "label_id": "670849d3-a3ec-55e2-b137-19213a279554",
+      "actual_value": "UNSUPPORTED_BEHAVIOR",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "0b58485c5ca7c789355c2db17783334f77fe5e5364630d66c419a1aec9908783"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "cf7289ea6c1f4b3a950bf1696e5f50f2",
+          "sha256": "265e62d677043c485839e1841af0c64c339edda5d0f23fc4232cfd04e8779477"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "2e262280d1e24f64bc55385e18cc9f2b",
+          "sha256": "d66b8cc4e8543f2d936a326d7e29b1e990ebff1851485f0ecad04db8a61740e8"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": []
+      },
+      "source_kind": "RUNTIME",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "dd2edc29-3ca4-5bc2-9a02-21936d3b5529",
+      "label_id": "25157c9a-b9bc-569c-a16c-fcba9f175d26",
+      "actual_value": "UNKNOWN",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "bbbe8965ea584f0fb4c45c92f8e6a819",
+          "sha256": "9ef6f19e97b1dae5fbc343c01394e371728e60f673d2f94d15cc59942b7f5733"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "d769ba17d40b4d3f9832ba8eec9e780b",
+          "sha256": "f5e72fb289d6a4733853f6f8b132a0f9d4f4666400feb5b25dd138a6998113f2"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": [
+          "d0900483ba72c7fcaedd2256e9a87117a2190527f16b447abfa4a2a415fa1b90"
+        ]
+      },
+      "source_kind": "SYNTHETIC",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "192be400-ab43-5bad-b4b7-b8ff998732b0",
+      "label_id": "9975c473-b53a-5901-a9f7-5a06afb4dc59",
+      "actual_value": "TEST_DEFECT",
+      "source_artifacts": [
+        {
+          "kind": "contract",
+          "artifact_id": "contract-payment-valid-001",
+          "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
+        },
+        {
+          "kind": "spec",
+          "artifact_id": "contract-payment-valid-001-negative",
+          "sha256": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204"
+        },
+        {
+          "kind": "execution",
+          "artifact_id": "bbbe8965ea584f0fb4c45c92f8e6a819",
+          "sha256": "d2f68a88a1c200c79b8e9163ab73880b3cc0fb3d994de34e02e848a3dabbacc2"
+        },
+        {
+          "kind": "triage",
+          "artifact_id": "99c08818d2d649318600cfff49a49c74",
+          "sha256": "8f88eccc02145d73269efb3204138de7c1cb733f7608117a309f502f057dfd9e"
+        }
+      ],
+      "lineage": {
+        "requirement_ids": [
+          "REQ-PAY-001"
+        ],
+        "source_ids": [
+          "md-examples-rwa-requirements-payments"
+        ],
+        "source_fingerprints": {
+          "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+        },
+        "evidence_hashes": [
+          "d0900483ba72c7fcaedd2256e9a87117a2190527f16b447abfa4a2a415fa1b90"
+        ]
+      },
+      "source_kind": "SYNTHETIC",
+      "qualification_only": false
+    },
+    {
+      "evaluation_case_id": "f7d4d250-ad9a-57c3-ae59-9ea539cfe5f3",
+      "label_id": "f903ad04-e045-5230-b1b8-3e0808b4d429",
+      "actual_value": "PRODUCT_DEFECT",
+      "source_artifacts": [
+        {
+          "kind": "triage",
+          "artifact_id": "fab93a6f-6180-58ec-8149-f4bc33928e72",
+          "sha256": "0b197c0357ebe7683134fa798c139791ab6a3d7a0ebbe2b411993895297ed220"
+        }
+      ],
+      "lineage": {},
+      "source_kind": "SYNTHETIC",
+      "qualification_only": true
+    },
+    {
+      "evaluation_case_id": "6f4c996e-b31f-5616-b4df-512a2a4ef800",
+      "label_id": "9daae85e-23e9-5480-9919-37c7b94d9c11",
+      "actual_value": "DATA_FAILURE",
+      "source_artifacts": [
+        {
+          "kind": "triage",
+          "artifact_id": "6057725e-f03e-5a0f-9595-aeb6c2064ded",
+          "sha256": "4b904a67c9ca90921b253b2c2dd595e569b23cc27bda482cfece6d68852b8a9b"
+        }
+      ],
+      "lineage": {},
+      "source_kind": "SYNTHETIC",
+      "qualification_only": true
+    }
+  ]
+}

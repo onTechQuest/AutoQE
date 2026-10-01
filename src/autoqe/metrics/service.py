@@ -209,9 +209,8 @@ def model_usage(bundle):
 
 
 def agentguard(bundle):
-    return Metric(metric_id="agentguard_pass_rate", definition="Passing independent AgentGuard evaluations / AgentGuard evaluations performed.",
-                  availability="UNAVAILABLE", sample_size=0, source_refs=[],
-                  limitations=["AgentGuard evaluation integration is planned for M6 and no AgentGuard evaluation dataset/result exists for this metrics window."])
+    from autoqe.metrics.external import external_pass_rate
+    return external_pass_rate(bundle, provider_id="agentguard", metric_id="agentguard_pass_rate")
 
 
 def calculate_metrics(bundle: MetricsEvidenceBundle) -> QualityMetricsReport:

@@ -1,0 +1,8 @@
+{
+  "triage_id": "fab93a6f-6180-58ec-8149-f4bc33928e72",
+  "execution_id": "synthetic-control-execution",
+  "test_id": "synthetic-control-test",
+  "classification": "PRODUCT_DEFECT",
+  "summary": "Synthetic qualification control",
+  "recommended_next_action": "Retain evaluator control result"
+}

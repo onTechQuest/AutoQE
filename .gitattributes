@@ -1,0 +1,2 @@
+# Synthetic source artifacts carry byte hashes; retain their qualified bytes.
+qualification/m6/fixtures/*.json text eol=lf

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "project_id": "cypress-rwa",
+  "labels": [
+    {
+      "expected_value": "PRODUCT_DEFECT",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "01799979-f22b-538f-a5e3-ed14d25f3786",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "PRODUCT_DEFECT",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "ebf55761-b9ed-5152-9e9f-a7231b9a7380",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "PRODUCT_DEFECT",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "b3d441ce-9c31-5a83-b461-5bc241320a42",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "ENVIRONMENT_FAILURE",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "3ce450a9-02b5-5943-a4fe-d24c388c3939",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "DATA_FAILURE",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "d82f56fb-a2d5-5717-974f-254726a7f6f4",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "UNSUPPORTED_BEHAVIOR",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "670849d3-a3ec-55e2-b137-19213a279554",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "UNKNOWN",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "25157c9a-b9bc-569c-a16c-fcba9f175d26",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "TEST_DEFECT",
+      "provenance": {
+        "source_id": "a075f87e-19f1-5672-a43d-613be1b2ac01",
+        "source_sha256": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+        "label_id": "9975c473-b53a-5901-a9f7-5a06afb4dc59",
+        "method": "external_qualification"
+      }
+    },
+    {
+      "expected_value": "PRODUCT_DEFECT",
+      "provenance": {
+        "source_id": "bead6772-486f-5b09-9faa-62a74b630d2c",
+        "source_sha256": "3088b7459502261e4220b7ec54329b64b549028c490cd608a2d51e172c50fe9e",
+        "label_id": "f903ad04-e045-5230-b1b8-3e0808b4d429",
+        "method": "synthetic_control"
+      }
+    },
+    {
+      "expected_value": "PRODUCT_DEFECT",
+      "provenance": {
+        "source_id": "67510ff6-349f-55a4-a1f1-21343a7f185c",
+        "source_sha256": "3088b7459502261e4220b7ec54329b64b549028c490cd608a2d51e172c50fe9e",
+        "label_id": "9daae85e-23e9-5480-9919-37c7b94d9c11",
+        "method": "synthetic_control"
+      }
+    }
+  ]
+}

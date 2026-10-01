@@ -55,8 +55,10 @@ Availability:
 - NOT_APPLICABLE: ratio has no eligible denominator in the selected window;
   value is null, counts remain zero, and the reason is explicit.
 - UNAVAILABLE: telemetry or an evaluation capability has no evidence; value and
-  unavailable numerator/denominator are null. AgentGuard is always unavailable
-  until separately authorized M6 integration.
+  unavailable numerator/denominator are null when no observations exist. An
+  incomplete external window retains its observed subset counts with a null
+  headline value. AgentGuard becomes available only with complete qualified M6
+  evidence; artifact sets without that evidence still report UNAVAILABLE.
 
 ## Exact metric definitions
 
@@ -70,7 +72,7 @@ Availability:
 | Triage accuracy | Actual classification equal to external expected classification / externally labeled cases, including missing triage as incorrect. Includes per-class support, confusion counts and individual expected/actual values. |
 | Task completion | Cases producing all explicitly required valid artifacts and terminal execution results / attempted evaluation cases. Required stages are declared individually, not inferred from status. |
 | AI token usage | Actual observed live tokens; zero only with the explicit no-live attestation above. Actual calls are reported separately. No text-length estimates. |
-| AgentGuard pass rate | UNAVAILABLE: integration planned for M6; no evaluation dataset/result exists for this window. Never reported as 0%. |
+| AgentGuard pass rate | Real completed M6 classification evaluations passing / real completed evaluations (pass or fail), available only when the entire explicitly planned real window completed. Controls excluded. Without external evidence: UNAVAILABLE, never 0%. |
 
 Executable means a valid linked TestSpec and ExecutionRecord, explicit PASSED
 capability/readiness/setup evidence for every provider setup group, no
@@ -129,3 +131,28 @@ defect population. Triage class supports are three PRODUCT_DEFECT and one each
 ENVIRONMENT_FAILURE, DATA_FAILURE, UNSUPPORTED_BEHAVIOR, UNKNOWN and TEST_DEFECT.
 Healthy cases have no external expected triage label and are excluded from triage
 accuracy. No statistical confidence or broad product coverage is implied.
+
+## M6 external evaluation evidence
+
+M6 adds an optional `external_evaluation_window` and `external_evaluation` artifact
+kind. Both use generic contracts from top-level `autoqe_integration/contracts`. Metrics
+does not import the AgentGuard provider, transport or evaluator. No runtime
+behavior changes. See [M6 external evaluation](M6_EXTERNAL_EVALUATION.md).
+
+The plan binds case UUIDs to canonical request hashes, provider/revision,
+project/window, dimension and qualification-only flags. Results must match the
+plan; duplicates and contradictory identities fail closed. Missing result
+entries/files are counted against the retained plan. Other missing referenced
+artifact kinds continue to fail clearly as before.
+
+The metric retains planned, attempted, completed, passed, failed, error,
+incomplete, missing and excluded-control counts. ERROR/INCOMPLETE are not
+classification FAIL. Any missing or uncompleted real case makes the headline
+UNAVAILABLE rather than reporting a successful partial subset. Real completed
+FAIL results remain in the denominator. Controls are excluded regardless of
+their status, and their qualification is reported separately.
+
+M6's standalone manifest selects external evaluations only, so unrelated metrics
+have no selected population and usage remains unavailable without its own usage
+artifact. This does not erase or replace the earlier M4/M5 report. No unselected
+historical runtime evidence is scanned or implicitly combined.

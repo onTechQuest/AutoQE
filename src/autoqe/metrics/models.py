@@ -7,12 +7,13 @@ from pydantic import Field, model_validator
 
 from autoqe.contracts.common import Identifier, PrivacySafeModel
 from autoqe.contracts.triage_record import TriageClassification
+from autoqe_integration.contracts import ExternalEvaluationWindow
 
 Stage = Literal["contract", "spec", "execution", "triage"]
 
 
 class ArtifactInput(PrivacySafeModel):
-    kind: Literal["contract", "spec", "execution", "triage", "qualification", "usage"]
+    kind: Literal["contract", "spec", "execution", "triage", "qualification", "usage", "external_evaluation"]
     path: str = Field(min_length=1)
 
 
@@ -62,6 +63,7 @@ class MetricsManifest(PrivacySafeModel):
     cases: list[CaseInput] = Field(default_factory=list)
     checks: list[EvidenceCheck] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)
+    external_evaluation_window: ExternalEvaluationWindow | None = None
 
 
 class ModelUsage(PrivacySafeModel):

@@ -12,9 +12,15 @@ dependencies = ["pydantic>=2.10,<3", "httpx>=0.28,<1", "playwright==1.63.0"]
 [project.optional-dependencies]
 test = ["pytest>=8,<9"]
 
+[tool.setuptools.package-dir]
+autoqe = "src/autoqe"
+autoqe_integration = "autoqe_integration"
+
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "."]
+include = ["autoqe", "autoqe.*", "autoqe_integration", "autoqe_integration.*"]
+namespaces = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "."]

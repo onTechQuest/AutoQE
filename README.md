@@ -2,11 +2,11 @@
 
 AutoQE is a vendor-neutral autonomous Quality Engineering orchestration framework that converts product intent and change context into risk-based executable test specifications, delegates execution to existing testing ecosystems, analyzes evidence, and can be independently evaluated by AgentGuard.
 
-**AutoQE v1 is an MVP implemented through M5.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, evidence-based triage qualified against isolated controlled faults, and observational quality metrics.
+**AutoQE v1 is an MVP implemented through M6.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, evidence-based triage qualified against isolated controlled faults, observational quality metrics, and provider-neutral external evaluation.
 
 The primary reference target is the [Cypress Real World App](https://github.com/cypress-io/cypress-realworld-app), pinned for qualification at `9dfcb9869533ce8a8963c556facc0d80457f9d39`. Its existing Cypress tests remain independent benchmark/oracle evidence and are not inputs to AutoQE generation.
 
-AutoQE artifacts may later be evaluated by AgentGuard through an external adapter. AutoQE does not import or depend on AgentGuard at runtime.
+AutoQE artifacts can be evaluated after production through an external provider. AgentGuard is the first provider, qualified only for deterministic triage-classification agreement. AutoQE core does not import or depend on AgentGuard.
 
 The initial implementation uses Python 3.13, Pydantic v2, and offline pytest contract checks:
 
@@ -57,10 +57,17 @@ for the CLI, isolation boundary, evidence rules, and limitations.
 
 M5 computes deterministic, evidence-backed metrics after qualification, without
 affecting runtime behavior or making release decisions. AgentGuard evaluation
-remains unavailable until M6. See [M5 quality metrics](docs/M5_QUALITY_METRICS.md).
+remains unavailable without a complete external evidence window. See [M5 quality metrics](docs/M5_QUALITY_METRICS.md).
 
 ```powershell
 .venv/Scripts/python.exe scripts/report_quality_metrics.py `
     --evidence-manifest examples/metrics/manifest.json `
     --output reports/metrics
 ```
+
+M6 adds transport-neutral request/result contracts, an external provider protocol,
+and an isolated local-process AgentGuard provider. It uses the existing separate
+AgentGuard Python environment and no live models or RWA startup. It measures only
+agreement with independently labeled triage classifications, not reasoning quality
+or release readiness. See [M6 external evaluation](docs/M6_EXTERNAL_EVALUATION.md)
+for qualification commands, privacy boundaries, and future API architecture.

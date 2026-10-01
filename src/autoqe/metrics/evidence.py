@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from autoqe.contracts import BehavioralContract, ExecutionRecord, TestSpec, TriageRecord
 from autoqe.contracts.common import _reject_sensitive_fields
 from autoqe.metrics.models import MetricsManifest, ModelUsage
+from autoqe_integration.contracts import ExternalEvaluationResult, canonical_json, read_json
 
 
 class MetricsEvidenceError(ValueError):
@@ -44,6 +45,10 @@ def load_evidence(path: Path) -> MetricsEvidenceBundle:
         try:
             content = resolved.read_bytes()
         except OSError:
+            if ref.kind == "external_evaluation":
+                # A retained plan still accounts for the missing result. The
+                # complete-window metric remains unavailable, never partial PASS.
+                continue
             raise MetricsEvidenceError(f"missing referenced artifact: {key}") from None
         sources[key] = hashlib.sha256(content).hexdigest()
         try:
@@ -63,8 +68,11 @@ def load_evidence(path: Path) -> MetricsEvidenceBundle:
             except ValueError:
                 raise MetricsEvidenceError(f"unsafe qualification metadata: {key}") from None
         try:
-            artifacts[key] = models[ref.kind].model_validate(raw) if ref.kind in models else raw
-        except ValidationError:
+            if ref.kind == "external_evaluation":
+                artifacts[key] = ExternalEvaluationResult.model_validate_json(canonical_json(read_json(content)))
+            else:
+                artifacts[key] = models[ref.kind].model_validate(raw) if ref.kind in models else raw
+        except ValueError:
             if ref.kind == "spec":
                 invalid[key] = "frozen TestSpec schema validation failed"
                 continue
@@ -119,4 +127,7 @@ def load_evidence(path: Path) -> MetricsEvidenceBundle:
             raise MetricsEvidenceError("usage call count contradicts supporting telemetry")
         if item.mode == "TELEMETRY" and (type(source.get("live_model_tokens")) is not int or source["live_model_tokens"] != item.live_model_tokens):
             raise MetricsEvidenceError("usage token count lacks matching source telemetry")
-    return MetricsEvidenceBundle(manifest, artifacts, invalid, sources)
+    bundle = MetricsEvidenceBundle(manifest, artifacts, invalid, sources)
+    from autoqe.metrics.external import validate_external_window
+    validate_external_window(bundle)
+    return bundle

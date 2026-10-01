@@ -155,7 +155,7 @@ def test_actual_usage_telemetry(evidence):
     assert metric.value == 123 and metric.sample_size == 2
 
 
-def test_agentguard_always_unavailable(evidence):
+def test_agentguard_without_external_evidence_is_unavailable(evidence):
     metric = result(evidence, "agentguard_pass_rate")
     assert metric.availability == "UNAVAILABLE" and metric.value is None
     assert "M6" in metric.limitations[0]

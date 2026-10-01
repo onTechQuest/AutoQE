@@ -18,8 +18,8 @@ C:\Projects\AutoQE
 
 Current completed implementation through:
 
-M5 - Quality Metrics (qualified in the working tree; not committed).
-The preceding M4 checkpoint is committed as `d7ce21b`.
+M6 - Provider-neutral External Evaluation (qualified in the working tree; not committed).
+The preceding M5 checkpoint is committed as `073507c`; M4 is `d7ce21b`.
 
 Current M3 commit:
 
@@ -560,7 +560,7 @@ coverage, authorization correctness, or production readiness.
 
 ## M5 - Quality Metrics
 
-Status: COMPLETE in the working tree; not committed. Qualified 2026-10-01.
+Status: COMPLETE, committed as `073507c`. Qualified 2026-10-01.
 
 Architecture: explicit versioned `MetricsManifest` -> validated
 `MetricsEvidenceBundle` -> nine independent calculators -> deterministic
@@ -646,10 +646,117 @@ a supported observed mismatch may detect a fault while other outcomes remain
 unresolved. AgentGuard pass rate remains unavailable until M6. Historical runtime
 reports are intentionally not fresh-checkout dependencies.
 
+## M6 - Provider-neutral External Evaluation
+
+Status: COMPLETE in the working tree; not committed. Qualified 2026-10-01.
+
+Architecture and commands: [M6 external evaluation](M6_EXTERNAL_EVALUATION.md).
+
+Top-level `autoqe_integration/contracts` owns versioned ExternalEvaluationRequest,
+ExternalEvaluationResult, planned-window identity and the EvaluationProvider
+protocol. These models are outside frozen M0. `autoqe_integration/transport` owns a
+bounded local subprocess transport. `autoqe_integration/providers/agentguard` owns the
+first real provider and fixed worker. Generic contracts have no evaluator-specific
+fields or imports, and provider revisions need not be Git hashes for future
+providers. No placeholder providers were added.
+
+The worker uses the separate AgentGuard environment and pinned revision
+`ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`. It calls only the existing deterministic
+`evaluate_record` over a minimal captured classification view. It does not execute
+the support agent, semantic judges, quality gates, safety aggregates or full native
+run-lineage builder. Actual and expected values must each be one exact frozen
+classification enum, without surrounding prose or whitespace. Expected labels
+come from separate external qualification evidence, never actual triage output.
+
+AgentGuard's native ScenarioScore is retained unchanged inside the provider-neutral
+result. Empty tool expectations/calls represent inapplicable tool evaluation;
+those native flags are not presented as AutoQE tool-quality evidence. No latency,
+model/prompt identity, tool results or usage telemetry is fabricated. The result
+preserves sanitized request identity, original source IDs/hashes, provenance,
+applicability, provider identity, completion status and bounded error codes.
+
+The export is field-allowlisted. Full M4/M5 reports, runtime records, fault IDs,
+patches, worktree paths, credentials, cookies, headers and authentication/body
+payloads are not forwarded. Opaque case/label IDs replace controller case names.
+Worker environment inheritance is restricted, bytecode writes disabled, and
+live/reference execution imports plus network connection/binding/DNS paths are
+blocked. No AgentGuard installation or checkout mutation is performed.
+
+M5 imports only the generic integration contracts. Its optional external window
+binds planned case IDs, request hashes, provider/revision and control flags.
+COMPLETED_PASS contributes to numerator; COMPLETED_PASS and COMPLETED_FAIL to
+denominator. Any missing real result, ERROR or INCOMPLETE makes the headline
+UNAVAILABLE. Planned/attempted/completed/passed/failed/error/incomplete/missing
+and excluded-control counts remain visible. Controls never enter the real metric.
+Metrics without external evidence retain their previous unavailable behavior.
+
+Final real qualification at `reports/m6-qualification/qualification.json`:
+
+| Population | Planned | Completed PASS | Completed FAIL | ERROR | INCOMPLETE/missing |
+|---|---:|---:|---:|---:|---:|
+| Previously qualified, externally labeled AutoQE cases | 8 | 8 | 0 | 0 | 0 |
+| Positive provider control | 1 | 1 | 0 | 0 | 0 |
+| Negative provider control | 1 | 0 | 1 | 0 | 0 |
+
+The population is derived from explicit sanitized evidence, not hardcoded. It
+includes three product-defect cases and one each environment, data, unsupported,
+unknown and test-defect label. The last two are historical synthetic triage cases,
+not new runtime defects, and differ from the two new qualification-only controls.
+Positive control: expected PRODUCT_DEFECT / actual PRODUCT_DEFECT. Negative
+control: expected PRODUCT_DEFECT / actual DATA_FAILURE. Both controls behaved as
+required. Ten real evaluator subprocess invocations produced ten native scores
+in the final window. M5 reports AVAILABLE, 8/8 (100%), excluding both controls.
+
+Verification:
+
+- Focused M6 tests: 75 passed; combined M6/metrics/contracts: 148 passed.
+- Fresh-checkout-style copy without `.git` or historical reports: all 148 focused
+  tests passed. Unit tests require neither AgentGuard nor RWA.
+- AutoQE wheel built successfully from that copy and imported from an isolated
+  target directory. The environment initially lacked setuptools; a temporary
+  isolated build dependency download was approved after sandbox network denial.
+  Neither existing project environment nor AgentGuard was installed/modified by
+  that packaging check.
+- One final complete AutoQE suite: 354 passed.
+- Actual interpreter separation: AutoQE Python 3.13.7; AgentGuard Python 3.11.5
+  in its existing separate virtual environment.
+- Original artifact byte hashes and independent expectation source hash were
+  corroborated against explicitly referenced M4/M5 evidence. All normalized
+  results preserved their request identity and native score; repeated report
+  serialization was deterministic. Exported results contained no fault-profile
+  IDs, patch filenames, private payloads or reference credentials.
+- Final reports: `reports/m6-qualification/metrics-manifest.json`, normalized
+  per-case result files and `reports/m6-metrics/quality-metrics.json` (ignored).
+  The standalone M6 report selects only external evaluations; it does not infer
+  unrelated M1-M5 metric populations or token telemetry.
+- Live model calls: zero. No RWA startup or fault injection. Ports 3000/3001
+  remained stopped. RWA is clean at
+  `9dfcb9869533ce8a8963c556facc0d80457f9d39`. AgentGuard remains clean at its
+  qualified revision; no source or environment modification was needed.
+- AutoQE extraction/planning/execution/triage and frozen M0 contracts/interfaces/
+  schemas are unchanged. No AgentGuard imports/dependencies in AutoQE core.
+  Runtime reports/build verification outputs are ignored. `git diff --check`
+  passed. No commit was made.
+
+Only triage-classification agreement was independently evaluated. Contract
+grounding, planning quality, execution integrity, rationale quality, screenshots,
+comprehensive privacy, operational SLOs, model/prompt regression and release
+readiness remain outside M6. External oracle truth is trusted; hashes are not
+signatures. The pinned internal scorer interface is not a general stable SDK.
+The worker guards are not an OS sandbox, and captured process output is size-checked
+after completion rather than streamed under a hard resource cap.
+
+The same generic contracts can later use REST/events/queues/object storage/MCP.
+Documentation specifies a future TLS gateway with OAuth2/OIDC/service identities,
+short-lived credentials/mTLS, least-privilege scopes, schema/payload/rate controls,
+audit/correlation, replay protection, projection and provider routing. None of
+these services or transports is implemented in M6.
+
 ## Next Milestone Boundary
 
-M5 implementation adds observational metrics only. M6 is not started.
-AgentGuard integration and release decisions remain outside this scope.
+M6 is complete for the bounded dimension above. M7 is not started. CI/CD,
+release automation, new evaluation dimensions and enterprise transports require
+separate authorization.
 
 ## Deferred / V2 Capabilities
 

@@ -1,0 +1,8 @@
+{
+  "triage_id": "6057725e-f03e-5a0f-9595-aeb6c2064ded",
+  "execution_id": "synthetic-control-execution",
+  "test_id": "synthetic-control-test",
+  "classification": "DATA_FAILURE",
+  "summary": "Synthetic qualification control",
+  "recommended_next_action": "Retain evaluator control result"
+}
