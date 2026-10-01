@@ -398,7 +398,7 @@ RWA remained pinned and clean.
 
 M0 contracts remained unchanged.
 
-## Current Clean Checkpoint
+## M3 Clean Checkpoint
 
 Completed:
 
@@ -408,13 +408,71 @@ M1    Behavioral Contract Extraction
 M2    Risk-Based Test Planning
 M3    Deterministic UI/API Execution
 
-Current full-suite result:
+Full-suite result at M3 completion:
 
 78 passed
 
 Current repository state at M3 completion:
 
 clean
+
+## Pre-M4 Execution Hardening Checkpoint
+
+Status: COMPLETE in the working tree; not committed. This is not M4.
+
+The core execution service now uses internal `ExecutionSetupAdapter` and
+`CheckedExecutionProvider` protocols. The frozen M0 contracts, interfaces, and
+schemas are unchanged. RWA fixture setup is inferred from resolved semantic
+operations inside the adapter, not from a contract ID in the core service.
+
+Providers preflight semantic targets, arguments, ordering, and exact supported
+outcome IDs/descriptions before setup. Unsupported semantics produce SKIPPED
+records with UNSUPPORTED_BEHAVIOR and explicit UNKNOWN assertions. Completeness
+validation prevents PASSED when outcomes or steps are missing, unresolved,
+ambiguous, skipped, or mismatched. It preserves provider evidence and never
+upgrades an existing non-pass.
+
+BOTH status precedence is ERROR, then FAILED, then INCOMPLETE. All PASSED is
+PASSED; all SKIPPED is SKIPPED; mixed PASSED/SKIPPED is INCOMPLETE. Each provider
+must independently account for every expected outcome. Provider-specific setup,
+steps, assertions, and evidence are retained in the composite record.
+
+Qualified payment semantics now check the submitted amount and transaction
+identity. API checks also require correct sender/recipient identities and the
+complete payment state in both participant histories. UI checks require exactly
+one matching payment with the submitted amount, and the same transaction in both
+histories for the reflected-state outcome. These implement existing payment
+requirements; fees, limits, insufficient-funds rules, and balance formulas are
+not inferred. Stored completion status is not exposed by the current UI checks,
+so the UI state-transition outcome is explicitly unsupported. Authorization and
+account-setup execution remain unsupported. The resolver is intentionally bounded
+to approved outcome semantics rather than accepting unfamiliar IDs or paraphrases.
+
+IPv6 loopback URLs retain the required brackets around `::1`. Local-only
+validation and runtime-only credential handling remain in force.
+
+Execution test fixtures are generated in memory from committed M1 contracts and
+approved planning replays, then validated against the frozen TestSpec model.
+Tests no longer require ignored runtime plans. No runtime reports were committed
+and `.gitignore` is unchanged.
+
+Verification:
+
+- Focused execution/hardening tests: 122 passed.
+- One complete AutoQE suite: 183 passed.
+- Isolated source copy without `reports/`: 122 focused tests passed; no reports
+  directory was created. The existing Python environment supplied dependencies.
+- `git diff --check`: passed.
+- AgentGuard: clean and unchanged at `ee104f9`.
+- RWA: clean at `9dfcb9869533ce8a8963c556facc0d80457f9d39`.
+- Ports 3000/3001: no listeners.
+- Live model calls: zero. No real credential was persisted; synthetic transport
+  tests verify credentials are absent from normalized records and API evidence.
+
+The historical M3 3/3 UI, API, and BOTH qualifications above were not rerun during
+this checkpoint. Provider hardening was verified offline with synthetic transport
+and browser doubles. No reference application fault was injected, no runtime
+triage was implemented, and M4 remains unstarted.
 
 ## Next Milestone
 

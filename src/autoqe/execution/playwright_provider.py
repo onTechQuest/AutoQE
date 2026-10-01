@@ -25,15 +25,9 @@ from autoqe.execution.records import evidence_uri, make_execution_record
 
 
 class PlaywrightExecutionProvider:
+    provider_name = "playwright"
+    execution_layer = TestLayer.UI
     provider_version = "1.63.0"
-    _SUPPORTED_ACTIONS = {
-        SemanticAction.AUTHENTICATE,
-        SemanticAction.SELECT_ENTITY,
-        SemanticAction.ENTER_VALUE,
-        SemanticAction.SUBMIT,
-        SemanticAction.ASSERT,
-        SemanticAction.WAIT_FOR_STATE,
-    }
 
     def __init__(
         self,
@@ -47,10 +41,10 @@ class PlaywrightExecutionProvider:
         self.resolver = RwaSemanticActionResolver()
 
     def supports(self, test_spec: TestSpec) -> bool:
-        return (
-            test_spec.test_layer in {TestLayer.UI, TestLayer.BOTH}
-            and all(step.action in self._SUPPORTED_ACTIONS for step in test_spec.steps)
-        )
+        return not self.capability_errors(test_spec)
+
+    def capability_errors(self, test_spec: TestSpec) -> tuple[str, ...]:
+        return self.resolver.capability_errors(test_spec, self.execution_layer)
 
     def execute(self, test_spec: TestSpec, project_profile: ProjectProfile):
         started_at = datetime.now(timezone.utc)
@@ -72,7 +66,8 @@ class PlaywrightExecutionProvider:
                     ExecutionStatus.SKIPPED,
                     started_at,
                     started_clock,
-                    observed_outcomes=["Playwright provider does not support this TestSpec layer or semantic action."],
+                    observed_outcomes=list(self.capability_errors(test_spec)),
+                    failure_category=FailureCategory.UNSUPPORTED_BEHAVIOR,
                     reset_identity=project_profile.environment.reset_identity,
                     execution_id=execution_id,
                 )
@@ -111,21 +106,33 @@ class PlaywrightExecutionProvider:
                             raise AssertionError("completed payment summary was not visible") from exc
                         observed.append("RWA displayed the completed payment summary.")
                     elif action.operation == RwaOperation.ASSERT_PAYMENT_OUTCOME:
-                        self._assert_payment_visible(page, ui_base, action.description or "")
-                        visible = self.project_adapter.ui_locator(
-                            page,
-                            "transaction_description",
-                            actor_role="sender",
-                        )
-                        evidence.append(self._capture_page(page, execution_id, step.step_id))
-                        assertions.append(
-                            AssertionResult(
-                                assertion_id="payment-recorded-once",
+                        for outcome in test_spec.expected_outcomes:
+                            if outcome.outcome_id not in self.resolver.assertion_ids(action):
+                                continue
+                            roles = ("sender", "recipient") if outcome.outcome_id == "payment-reflected" else ("sender",)
+                            outcome_evidence = []
+                            payment_identity = None
+                            for role in roles:
+                                if current_actor != role:
+                                    self.project_adapter.ui_locator(page, "signout").click()
+                                    self._authenticate(page, ui_base, role)
+                                    current_actor = role
+                                identity = self._assert_payment_visible(page, ui_base, action.description or "")
+                                if payment_identity is not None and identity != payment_identity:
+                                    raise AssertionError("participant histories did not show the same payment")
+                                payment_identity = identity
+                                captured = self._capture_page(
+                                    page, execution_id, f"{step.step_id}-{outcome.outcome_id}-{role}"
+                                )
+                                outcome_evidence.append(captured)
+                                evidence.append(captured)
+                            assertions.append(AssertionResult(
+                                assertion_id=outcome.outcome_id,
                                 status=ResultStatus.PASSED,
-                                expected="A valid payment is recorded once after submission.",
-                                observed="Exactly one matching payment is visible in sender history.",
-                            )
-                        )
+                                expected=outcome.description,
+                                observed="Exactly one payment with the submitted amount is visible in the required participant histories.",
+                                evidence_refs=outcome_evidence,
+                            ))
                     elif action.operation == RwaOperation.ASSERT_TRANSACTION_VISIBLE:
                         requested_actor = action.actor_role or current_actor
                         if requested_actor != current_actor:
@@ -139,7 +146,7 @@ class PlaywrightExecutionProvider:
                             AssertionResult(
                                 assertion_id=outcome_id,
                                 status=ResultStatus.PASSED,
-                                expected="The transaction participant can find the recorded payment in personal history.",
+                                expected=next(item.description for item in test_spec.expected_outcomes if item.outcome_id == outcome_id),
                                 observed=f"The {current_actor} account displays the seeded history transaction.",
                             )
                         )
@@ -207,11 +214,21 @@ class PlaywrightExecutionProvider:
             return {"username": actors.recipient_username}
         raise ValueError("unsupported RWA actor role")
 
-    def _assert_payment_visible(self, page, ui_base: str, description: str) -> None:
+    def _assert_payment_visible(self, page, ui_base: str, description: str) -> str:
         self._assert_history_visible(page, ui_base, description)
         matches = page.get_by_text(description, exact=True)
         if matches.count() != 1 or not matches.is_visible():
             raise AssertionError("expected payment was not visible exactly once in sender history")
+        row = self.project_adapter.payment_row(page, description)
+        if row.count() != 1:
+            raise AssertionError("expected exactly one matching payment row")
+        amount = self.project_adapter.payment_amount_locator(row).inner_text().strip()
+        if amount != f"-${self.resolver.PAYMENT_AMOUNT:,.2f}":
+            raise AssertionError("displayed payment amount did not match the submitted amount")
+        identity = row.get_attribute("data-test")
+        if not identity or identity == "transaction-item-":
+            raise AssertionError("payment row has no transaction identity")
+        return identity
 
     def _assert_history_visible(self, page, ui_base: str, description: str) -> None:
         try:

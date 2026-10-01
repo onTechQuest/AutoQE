@@ -12,7 +12,7 @@ The seeded password is read from `RWA_TEST_PASSWORD` at runtime only. It is neve
 
 `RwaSemanticActionResolver` maps a small explicit set of M2 semantic actions and target names to typed RWA operations. Unknown targets or mismatched action arguments fail explicitly. No `eval`, `exec`, arbitrary shell, or model-generated selectors/code are used.
 
-`PlaywrightExecutionProvider` supports selected UI/BOTH TestSpecs using accessible labels/roles and the inspected stable RWA test hooks. Browser requests are restricted to loopback; screenshots capture only relevant visible elements. No trace archive is stored because it could include authentication traffic.
+`PlaywrightExecutionProvider` supports selected UI/BOTH TestSpecs using accessible labels/roles and the inspected stable RWA test hooks. Browser requests are restricted to loopback; screenshots include cropped confirmation elements and viewport captures after transaction-history assertions on synthetic accounts. No trace archive is stored because it could include authentication traffic.
 
 `ApiExecutionProvider` uses httpx with `trust_env=False` against loopback only. It authenticates using the RWA session flow and exercises only the selected transaction/history routes. Persisted API evidence includes status/count/hash metadata, never raw bodies, headers, or cookies.
 

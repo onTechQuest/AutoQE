@@ -5,6 +5,8 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
+from functools import lru_cache
 from time import perf_counter
 
 import pytest
@@ -12,6 +14,7 @@ from pydantic import ValidationError
 
 from autoqe.adapters.rwa import RWA_REVISION, RwaProjectAdapter, RwaTestActors
 from autoqe.contracts import ProjectProfile
+from autoqe.contracts.behavioral_contract import BehavioralContract
 from autoqe.contracts.common import EvidenceReference
 from autoqe.contracts.execution_record import (
     AssertionResult,
@@ -32,6 +35,8 @@ from autoqe.execution.service import (
     _combine_records,
     execute_test_spec,
 )
+from autoqe.planning.service import plan_tests
+from autoqe.providers.replay import ReplayModelProvider
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,9 +47,22 @@ def load_profile() -> ProjectProfile:
     )
 
 
+@lru_cache
+def _payment_specs() -> dict[str, str]:
+    contract = BehavioralContract.model_validate_json(
+        (ROOT / "examples/rwa/plans/contracts/payment.json").read_text(encoding="utf-8")
+    )
+    result = plan_tests(load_profile(), contract, ReplayModelProvider(ROOT / "examples/rwa/replays.json"))
+    return {
+        f"testspec-{index:02d}-{spec.test_id}.json": spec.model_dump_json()
+        for index, spec in enumerate(result.test_specs, start=1)
+    }
+
+
 def load_spec(filename: str) -> AutoQETestSpec:
+    # Build only in memory from committed, fingerprinted inputs; never read reports.
     return AutoQETestSpec.model_validate_json(
-        (ROOT / "reports/plans/contract-payment-valid-001" / filename).read_text(encoding="utf-8")
+        _payment_specs()[filename]
     )
 
 
@@ -58,14 +76,15 @@ def make_record(spec: AutoQETestSpec, provider: str, status: ExecutionStatus) ->
         status,
         now,
         perf_counter(),
-        step_results=[StepResult(step_id=spec.steps[0].step_id, status=ResultStatus.PASSED)],
+        step_results=[StepResult(step_id=step.step_id, status=ResultStatus.PASSED) for step in spec.steps],
         assertion_results=[
             AssertionResult(
-                assertion_id="payment-recorded-once",
+                assertion_id=outcome.outcome_id,
                 status=ResultStatus.PASSED,
-                expected="A transaction is present exactly once.",
+                expected=outcome.description,
                 observed=f"observed-by-{provider}",
             )
+            for outcome in spec.expected_outcomes
         ],
         evidence_refs=[
             EvidenceReference(
@@ -285,7 +304,7 @@ def test_providers_enforce_supported_layers_and_allowlisted_steps() -> None:
     assert not ui_provider.supports(unknown)
 
 
-def test_both_layer_requires_exact_playwright_and_httpx_provider_pair() -> None:
+def test_both_layer_requires_ui_and_api_provider_pair() -> None:
     both_spec = load_spec("testspec-01-contract-payment-valid-001-positive.json")
     adapter = RwaProjectAdapter()
     with pytest.raises(UnsupportedExecutionProviderError, match="provider pair"):
@@ -304,7 +323,7 @@ def test_composite_both_merges_assertions_and_evidence_truthfully() -> None:
     composite = _combine_records(spec, load_profile(), [ui_record, api_record], "seed-identity")
     assert composite.provider == "playwright+httpx"
     assert composite.status == ExecutionStatus.PASSED
-    assert len(composite.assertion_results) == 1
+    assert len(composite.assertion_results) == len(spec.expected_outcomes)
     assert "playwright:" in composite.assertion_results[0].observed
     assert "httpx:" in composite.assertion_results[0].observed
     assert {evidence.uri for evidence in composite.evidence_refs} == {
@@ -332,7 +351,8 @@ def test_execution_provider_layer_mismatch_is_skipped_without_rwa_access() -> No
     provider = PlaywrightExecutionProvider(RwaProjectAdapter())
     record = execute_test_spec(spec, load_profile(), RwaProjectAdapter(), provider)
     assert record.status == ExecutionStatus.SKIPPED
-    assert record.assertion_results == []
+    assert all(item.status == ResultStatus.UNKNOWN for item in record.assertion_results)
+    assert record.failure_category == FailureCategory.UNSUPPORTED_BEHAVIOR
 
 
 def test_normalized_execution_record_preserves_all_terminal_statuses() -> None:
@@ -430,7 +450,7 @@ def test_node_preload_forces_loopback_and_rejects_remote_binds() -> None:
 def test_execution_cli_exposes_only_two_providers() -> None:
     script = ROOT / "scripts/execute_testspec.py"
     completed = subprocess.run(
-        [str(ROOT / ".venv/Scripts/python.exe"), str(script), "--help"],
+        [sys.executable, str(script), "--help"],
         cwd=ROOT,
         capture_output=True,
         text=True,

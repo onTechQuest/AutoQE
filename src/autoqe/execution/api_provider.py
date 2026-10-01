@@ -23,15 +23,9 @@ from autoqe.execution.records import evidence_uri, make_execution_record
 
 
 class ApiExecutionProvider:
+    provider_name = "httpx"
+    execution_layer = TestLayer.API
     provider_version = httpx.__version__
-    _SUPPORTED_ACTIONS = {
-        SemanticAction.AUTHENTICATE,
-        SemanticAction.SELECT_ENTITY,
-        SemanticAction.ENTER_VALUE,
-        SemanticAction.SUBMIT,
-        SemanticAction.ASSERT,
-        SemanticAction.WAIT_FOR_STATE,
-    }
 
     def __init__(
         self,
@@ -45,10 +39,10 @@ class ApiExecutionProvider:
         self.resolver = RwaSemanticActionResolver()
 
     def supports(self, test_spec: TestSpec) -> bool:
-        return (
-            test_spec.test_layer in {TestLayer.API, TestLayer.BOTH}
-            and all(step.action in self._SUPPORTED_ACTIONS for step in test_spec.steps)
-        )
+        return not self.capability_errors(test_spec)
+
+    def capability_errors(self, test_spec: TestSpec) -> tuple[str, ...]:
+        return self.resolver.capability_errors(test_spec, self.execution_layer)
 
     @staticmethod
     def _actor_for_role(actors: RwaTestActors, role: str) -> dict[str, str]:
@@ -78,7 +72,8 @@ class ApiExecutionProvider:
                     ExecutionStatus.SKIPPED,
                     started_at,
                     started_clock,
-                    observed_outcomes=["httpx provider does not support this TestSpec layer or semantic action."],
+                    observed_outcomes=list(self.capability_errors(test_spec)),
+                    failure_category=FailureCategory.UNSUPPORTED_BEHAVIOR,
                     reset_identity=project_profile.environment.reset_identity,
                     execution_id=execution_id,
                 )
@@ -91,9 +86,12 @@ class ApiExecutionProvider:
             sender_has_transaction = False
             recipient_has_transaction = False
             completed_status = False
+            payment_properties = False
+            transaction_id = None
 
             with httpx.Client(base_url=api_base, timeout=self.project_adapter.timeout_seconds, trust_env=False) as client:
                 for step in test_spec.steps:
+                    assertion_count = len(assertions)
                     action = self.resolver.resolve(step, actors)
                     if action.operation == RwaOperation.AUTHENTICATE:
                         actor = self._actor_for_role(actors, action.actor_role or "sender")
@@ -131,8 +129,12 @@ class ApiExecutionProvider:
                             raise RuntimeError("RWA payment response omitted transaction identity")
                         after = self._matching_transactions(client, project_profile, description or "")
                         sender_has_transaction = len(before) == 0 and len(after) == 1
-                        recipient_has_transaction = self._recipient_sees_transaction(
+                        recipient_transactions = self._recipient_transactions(
                             client, project_profile, actors, description or ""
+                        )
+                        recipient_has_transaction = len(recipient_transactions) == 1
+                        payment_properties = self._payment_properties_match(
+                            after, recipient_transactions, actors, amount, transaction_id
                         )
                         completed_status = any(item.get("status") == "complete" for item in after)
                         created_fingerprint = hashlib.sha256(transaction_id.encode("utf-8")).hexdigest()
@@ -173,8 +175,12 @@ class ApiExecutionProvider:
                         matching = self._matching_transactions(client, project_profile, action.description or "")
                         completed_status = any(item.get("status") == "complete" for item in matching)
                         sender_has_transaction = len(matching) == 1
-                        recipient_has_transaction = self._recipient_sees_transaction(
+                        recipient_transactions = self._recipient_transactions(
                             client, project_profile, actors, action.description or ""
+                        )
+                        recipient_has_transaction = len(recipient_transactions) == 1
+                        payment_properties = self._payment_properties_match(
+                            matching, recipient_transactions, actors, amount, transaction_id
                         )
                         http_events.append({"operation": "observe_recorded_state", "status": "OBSERVED" if completed_status else "MISSING"})
                     elif action.operation == RwaOperation.ASSERT_NO_TRANSACTION:
@@ -185,18 +191,18 @@ class ApiExecutionProvider:
                             AssertionResult(
                                 assertion_id="invalid-payment-not-recorded",
                                 status=ResultStatus.PASSED if passed else ResultStatus.FAILED,
-                                expected="An invalid payment request does not create a transaction.",
+                                expected=next(item.description for item in test_spec.expected_outcomes if item.outcome_id == "invalid-payment-not-recorded"),
                                 observed="The API rejected the invalid payload and no matching transaction exists." if passed else "The rejection/status or resulting state did not match the expected outcome.",
                             )
                         )
                     elif action.operation == RwaOperation.ASSERT_PAYMENT_OUTCOME:
                         for outcome in test_spec.expected_outcomes:
                             if outcome.outcome_id == "payment-recorded-once":
-                                passed = sender_has_transaction
+                                passed = sender_has_transaction and payment_properties
                             elif outcome.outcome_id == "payment-reflected":
-                                passed = sender_has_transaction and recipient_has_transaction
+                                passed = sender_has_transaction and recipient_has_transaction and payment_properties
                             elif outcome.outcome_id == "transition-1":
-                                passed = sender_has_transaction and recipient_has_transaction and completed_status
+                                passed = sender_has_transaction and recipient_has_transaction and completed_status and payment_properties
                             else:
                                 continue
                             assertions.append(
@@ -204,9 +210,10 @@ class ApiExecutionProvider:
                                     assertion_id=outcome.outcome_id,
                                     status=ResultStatus.PASSED if passed else ResultStatus.FAILED,
                                     expected=outcome.description,
-                                    observed="Matching transaction state was observed for the synthetic sender and recipient." if passed else "The expected transaction state was not observed.",
+                                    observed="Both participant histories contain the same payment with the submitted amount, correct actors, and complete state." if passed else "Payment count, amount, actors, identity, or complete state did not match.",
                                 )
                             )
+                            http_events.append({"operation": "assert_payment_properties", "outcome_id": outcome.outcome_id, "passed": passed})
                     elif action.operation == RwaOperation.ASSERT_TRANSACTION_VISIBLE:
                         visible = self._actor_sees_transaction(
                             client,
@@ -220,7 +227,7 @@ class ApiExecutionProvider:
                             AssertionResult(
                                 assertion_id=outcome_id,
                                 status=ResultStatus.PASSED if visible else ResultStatus.FAILED,
-                                expected="The participant can find the recorded payment in personal history.",
+                                expected=next(item.description for item in test_spec.expected_outcomes if item.outcome_id == outcome_id),
                                 observed="The API returned the seeded history transaction for this participant." if visible else "The transaction was absent from this participant's API history.",
                             )
                         )
@@ -230,7 +237,9 @@ class ApiExecutionProvider:
                     step_results.append(
                         StepResult(
                             step_id=step.step_id,
-                            status=ResultStatus.PASSED,
+                            status=(ResultStatus.FAILED if any(
+                                item.status == ResultStatus.FAILED for item in assertions[assertion_count:]
+                            ) else ResultStatus.PASSED),
                             observed=action.operation.value,
                         )
                     )
@@ -288,22 +297,39 @@ class ApiExecutionProvider:
                 "description": item.get("description"),
                 "status": item.get("status"),
                 "amount": item.get("amount"),
+                "senderId": item.get("senderId"),
+                "receiverId": item.get("receiverId"),
+                "requestStatus": item.get("requestStatus"),
             }
             for item in results
             if isinstance(item, dict) and item.get("description") == description
         ]
 
-    def _recipient_sees_transaction(
+    def _recipient_transactions(
         self,
         client: httpx.Client,
         profile: ProjectProfile,
         actors,
         description: str,
-    ) -> bool:
+    ) -> list[dict[str, object]]:
         self._login(client, profile, actors.recipient_username)
-        result = bool(self._matching_transactions(client, profile, description))
+        result = self._matching_transactions(client, profile, description)
         self._login(client, profile, actors.sender_username)
         return result
+
+    @staticmethod
+    def _payment_properties_match(sender_records, recipient_records, actors, amount, transaction_id) -> bool:
+        if len(sender_records) != 1 or len(recipient_records) != 1 or not transaction_id or amount is None:
+            return False
+        return all(
+            item.get("id") == transaction_id
+            and item.get("amount") == amount * 100
+            and item.get("status") == "complete"
+            and item.get("senderId") == actors.sender_id
+            and item.get("receiverId") == actors.recipient_id
+            and not item.get("requestStatus")
+            for item in [sender_records[0], recipient_records[0]]
+        )
 
     def _actor_sees_transaction(self, client, profile, actors, role: str, description: str) -> bool:
         username = actors.sender_username if role == "sender" else actors.recipient_username

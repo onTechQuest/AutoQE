@@ -6,12 +6,14 @@ from pathlib import Path
 import subprocess
 import time
 from typing import Callable, Mapping, Sequence
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 import httpx
 from playwright.sync_api import Locator, Page
 
 from autoqe.contracts.project_profile import NetworkScope, ProjectProfile
+from autoqe.contracts.test_spec import TestSpec
+from autoqe.execution.runtime import ExecutionSetup
 
 RWA_REVISION = "9dfcb9869533ce8a8963c556facc0d80457f9d39"
 _LOOPBACK_HOSTS = {"localhost", "127.0.0.1", "::1"}
@@ -55,8 +57,34 @@ class RwaProjectAdapter:
         parsed = urlsplit(value)
         if parsed.scheme != "http" or parsed.hostname not in _LOOPBACK_HOSTS or parsed.port is None:
             raise ValueError("RWA execution requires HTTP URLs on localhost, 127.0.0.1, or ::1")
-        host = parsed.hostname
-        return f"http://{host}:{parsed.port}"
+        if parsed.username is not None or parsed.password is not None:
+            raise ValueError("RWA URLs must not embed credentials")
+        host = f"[{parsed.hostname}]" if ":" in parsed.hostname else parsed.hostname
+        return urlunsplit((parsed.scheme, f"{host}:{parsed.port}", "", "", ""))
+
+    def prepare_execution(self, test_spec: TestSpec, profile: ProjectProfile) -> ExecutionSetup:
+        from autoqe.execution.actions import RwaOperation, RwaSemanticActionResolver
+
+        checkout = self.verify_reference_checkout(profile)
+        ready = self.verify_ready(profile)
+        self.authenticate_if_needed(profile)
+        reset = self.reset_environment(profile)
+        resolver = RwaSemanticActionResolver()
+        operations = [resolver.resolve(step).operation for step in test_spec.steps]
+        requirements = tuple(test_spec.test_data_requirements)
+        if RwaOperation.ASSERT_TRANSACTION_VISIBLE in operations:
+            requirements += ("rwa.history.baseline",)
+        setup = self.setup_test_data(profile, requirements)
+        return ExecutionSetup({**checkout, **ready, **setup}, reset.get("reset_identity"))
+
+    def payment_row(self, page: Page, description: str) -> Locator:
+        return page.locator('[data-test^="transaction-item-"]').filter(
+            has=page.get_by_text(description, exact=True)
+        )
+
+    @staticmethod
+    def payment_amount_locator(row: Locator) -> Locator:
+        return row.locator('[data-test^="transaction-amount-"]')
 
     def _urls(self, project_profile: ProjectProfile) -> tuple[str, str]:
         if project_profile.project_id != "cypress-rwa":

@@ -2,7 +2,7 @@
 
 AutoQE is a vendor-neutral autonomous Quality Engineering orchestration framework that converts product intent and change context into risk-based executable test specifications, delegates execution to existing testing ecosystems, analyzes evidence, and can be independently evaluated by AgentGuard.
 
-**AutoQE v1 is an MVP under construction.** This milestone freezes contracts only; it does not implement planning, execution, agents, or runtime integrations.
+**AutoQE v1 is an MVP implemented through M3.** It includes frozen contracts, grounded replay extraction, risk-based planning, and deterministic local UI/API execution. Controlled faults and runtime triage remain the next milestone.
 
 The primary reference target is the [Cypress Real World App](https://github.com/cypress-io/cypress-realworld-app), pinned for qualification at `9dfcb9869533ce8a8963c556facc0d80457f9d39`. Its existing Cypress tests remain independent benchmark/oracle evidence and are not inputs to AutoQE generation.
 

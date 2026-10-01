@@ -27,7 +27,7 @@ Layer choice is deterministic and uses only `ProjectProfile.execution_capabiliti
 
 The existing `ReplayModelProvider` handles `plan_test_specs` as a separate task. Its approved fixture matches a SHA-256 of the complete planning context and output schema; unknown or changed inputs fail closed. Replay responses provide only typed semantic steps. Risk, coverage, layer, expected outcomes, test data needs, evidence requests, traceability, and provenance are assembled or validated deterministically. TestSpecs contain no selectors, API implementation, shell, or provider code.
 
-TestSpec rationale is not a field in the frozen M0 contract. A non-persistent `PlanningSummary` carries scenario/layer rationales and deterministic coverage metrics. Unknowns are copied to that summary and each TestSpec's limitations; they are not converted into expected behavior. No PlanningRecord is introduced.
+TestSpec rationale is not a field in the frozen M0 contract. An internal `PlanningSummary` carries scenario/layer rationales and deterministic coverage metrics; the CLI persists it as a runtime `planning-summary.json` artifact under ignored `reports/plans/`. It is not a frozen M0 record. Unknowns are copied to that summary and each TestSpec's limitations; they are not converted into expected behavior. No PlanningRecord is introduced.
 
 ## Grounding and privacy
 

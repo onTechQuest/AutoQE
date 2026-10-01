@@ -9,10 +9,60 @@ from autoqe.contracts.execution_record import (
     ExecutionRecord,
     ExecutionStatus,
     FailureCategory,
+    ResultStatus,
     StepResult,
 )
 from autoqe.contracts.project_profile import ProjectProfile
 from autoqe.contracts.test_spec import TestSpec
+
+
+def validate_completeness(test_spec: TestSpec, record: ExecutionRecord) -> ExecutionRecord:
+    """Account for each expected outcome, retaining all supplied provider evidence.
+
+    Completeness can downgrade a result, never upgrade a provider's non-pass.
+    This is execution validation, not root-cause triage.
+    """
+    result = record.model_copy(deep=True)
+    issues: list[str] = []
+    expected_ids = [outcome.outcome_id for outcome in test_spec.expected_outcomes]
+    if len(set(expected_ids)) != len(expected_ids):
+        issues.append("Expected outcome IDs are not unique.")
+    for outcome in test_spec.expected_outcomes:
+        matches = [item for item in result.assertion_results if item.assertion_id == outcome.outcome_id]
+        if not matches:
+            result.assertion_results.append(AssertionResult(
+                assertion_id=outcome.outcome_id,
+                status=ResultStatus.UNKNOWN,
+                expected=outcome.description,
+                observed="No executed, supported assertion was reported for this expected outcome.",
+            ))
+            issues.append(f"Missing assertion: {outcome.outcome_id}.")
+        elif len(matches) != 1 or matches[0].expected != outcome.description:
+            issues.append(f"Ambiguous or mismatched assertion: {outcome.outcome_id}.")
+        if any(item.status in {ResultStatus.UNKNOWN, ResultStatus.SKIPPED} for item in matches):
+            issues.append(f"Unresolved assertion: {outcome.outcome_id}.")
+    if any(item.assertion_id not in expected_ids for item in result.assertion_results):
+        issues.append("Provider reported an assertion outside the expected outcomes.")
+    step_ids = [step.step_id for step in test_spec.steps]
+    if len(set(step_ids)) != len(step_ids):
+        issues.append("Semantic step IDs are not unique.")
+    for step_id in step_ids:
+        matches = [item for item in result.step_results if item.step_id == step_id]
+        if len(matches) != 1 or matches[0].status != ResultStatus.PASSED:
+            issues.append(f"Step did not complete successfully: {step_id}.")
+    if (result.test_id, result.project_id) != (test_spec.test_id, test_spec.project_id):
+        issues.append("Execution identity does not match the TestSpec.")
+    statuses = {item.status for item in result.assertion_results + result.step_results}
+    if ResultStatus.ERROR in statuses and result.status != ExecutionStatus.ERROR:
+        result.status = ExecutionStatus.ERROR
+        result.failure_category = FailureCategory.PROVIDER_ERROR
+    elif ResultStatus.FAILED in statuses and result.status not in {ExecutionStatus.ERROR, ExecutionStatus.FAILED}:
+        result.status = ExecutionStatus.FAILED
+        result.failure_category = FailureCategory.ASSERTION_FAILURE
+    elif issues and result.status == ExecutionStatus.PASSED:
+        result.status = ExecutionStatus.INCOMPLETE
+    result.limitations = list(dict.fromkeys(result.limitations + issues))
+    return ExecutionRecord.model_validate(result.model_dump(mode="python"))
 
 
 def make_execution_record(
@@ -35,7 +85,7 @@ def make_execution_record(
     completed_at = datetime.now(timezone.utc)
     ui_url = str(project_profile.application.ui_base_url)
     api_url = str(project_profile.application.api_base_url)
-    return ExecutionRecord(
+    record = ExecutionRecord(
         execution_id=execution_id or uuid4().hex,
         test_id=test_spec.test_id,
         project_id=test_spec.project_id,
@@ -66,6 +116,7 @@ def make_execution_record(
         producer_version="0.3.0",
         limitations=list(test_spec.limitations),
     )
+    return validate_completeness(test_spec, record)
 
 
 def evidence_uri(path: Path, repository_root: Path) -> str:
