@@ -2,7 +2,7 @@
 
 AutoQE is a vendor-neutral autonomous Quality Engineering orchestration framework that converts product intent and change context into risk-based executable test specifications, delegates execution to existing testing ecosystems, analyzes evidence, and can be independently evaluated by AgentGuard.
 
-**AutoQE v1 is an MVP implemented through M6.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, evidence-based triage qualified against isolated controlled faults, observational quality metrics, and provider-neutral external evaluation.
+**AutoQE v1 is an MVP implemented through M7.** It includes frozen contracts, grounded replay extraction, risk-based planning, deterministic local UI/API execution, evidence-based triage qualified against isolated controlled faults, observational quality metrics, provider-neutral external evaluation, and deterministic CI checks.
 
 The primary reference target is the [Cypress Real World App](https://github.com/cypress-io/cypress-realworld-app), pinned for qualification at `9dfcb9869533ce8a8963c556facc0d80457f9d39`. Its existing Cypress tests remain independent benchmark/oracle evidence and are not inputs to AutoQE generation.
 
@@ -71,3 +71,10 @@ AgentGuard Python environment and no live models or RWA startup. It measures onl
 agreement with independently labeled triage classifications, not reasoning quality
 or release readiness. See [M6 external evaluation](docs/M6_EXTERNAL_EVALUATION.md)
 for qualification commands, privacy boundaries, and future API architecture.
+
+M7 adds GitHub Actions for Python 3.13 installation, the complete deterministic
+suite, existing architecture boundaries, and wheel validation. Standard CI needs
+no RWA, AgentGuard, application credentials, browser binaries or live models.
+**CI PASS does not mean full real-world RWA/AgentGuard qualification.** See
+[M7 CI/CD](docs/M7_CI_CD.md) for triggers, security, external qualification
+boundaries and local reproduction commands.

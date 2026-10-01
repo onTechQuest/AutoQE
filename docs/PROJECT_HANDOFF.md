@@ -752,11 +752,39 @@ short-lived credentials/mTLS, least-privilege scopes, schema/payload/rate contro
 audit/correlation, replay protection, projection and provider routing. None of
 these services or transports is implemented in M6.
 
+## M7: Shift-left / CI/CD
+
+M7 adds `.github/workflows/ci.yml` for PRs, pushes to `master`, and manual
+dispatch. One Ubuntu/Python 3.13 job installs `.[test]`, compiles/imports packages,
+runs the deterministic suite with existing architecture guards, builds and
+validates the wheel, and verifies isolated imports of the installed wheel.
+Node 22 supports only the existing loopback-preload test; full Git history
+supports the frozen-M0 checkpoint test. No runtime architecture changed.
+
+Permissions are `contents: read`; checkout credentials are not persisted.
+Standard CI uses no application secrets, external checkouts, live models,
+Playwright browsers, historical reports or real RWA/AgentGuard execution.
+The wheel validator admits only current `autoqe` and `autoqe_integration` sources
+and distribution metadata. Build output is ignored and not uploaded/published.
+
+Preflight: clean `master` at `fa1a16164ad42cd70b398dc75d617256e3df7392`,
+354 baseline tests passed, and no Git remote configured. Local validation details
+and reproduction are in [M7 CI/CD](M7_CI_CD.md). A local pass is not evidence of
+a GitHub-hosted workflow run. **CI PASS is not full real-world RWA/AgentGuard
+qualification**; M4 and M6 remain separately provisioned external procedures.
+
+M7 local verification: 18 focused validator tests and 372 full-suite tests passed
+in a fresh local clone/environment. Wheel build/content checks and isolated
+installed-wheel imports passed (48 core files, eight integration files, four
+metadata files). No live model calls or external qualification ran. RWA and
+AgentGuard remained clean/pinned, ports 3000/3001 stopped, and M0/runtime code
+unchanged. No commit or push was made; no GitHub-hosted run occurred.
+
 ## Next Milestone Boundary
 
-M6 is complete for the bounded dimension above. M7 is not started. CI/CD,
-release automation, new evaluation dimensions and enterprise transports require
-separate authorization.
+M7 is limited to deterministic CI and packaging checks. M8 is not started.
+Release automation, new evaluation dimensions, deployment and enterprise
+transports require separate authorization.
 
 ## Deferred / V2 Capabilities
 

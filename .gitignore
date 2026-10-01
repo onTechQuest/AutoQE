@@ -6,4 +6,6 @@ __pycache__/
 .coverage
 htmlcov/
 reports/
+build/
+dist/
 .vscode/
