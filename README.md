@@ -10,9 +10,9 @@ performs deterministic triage, measures QE effectiveness, and supports independe
 external evaluation. V1 demonstrates this chain using approved replay outputs,
 a bounded reference adapter, Playwright and httpx—not live LLM calls.
 
-**Start here:** [project overview](docs/PROJECT_OVERVIEW.md) ·
-[guided demo](docs/DEMO_GUIDE.md) · [static artifacts](examples/demo/README.md) ·
-[architecture](docs/ARCHITECTURE.md)
+**Reading path:** [project overview](docs/PROJECT_OVERVIEW.md) ->
+[architecture](docs/ARCHITECTURE.md) -> [guided demonstration](docs/DEMO_GUIDE.md).
+The [published artifacts](examples/demo/README.md) provide an inspectable example chain.
 
 ## The problem
 
@@ -82,7 +82,7 @@ claim a new live qualification run.
 | M5 triage / completion | Classification agreement 8/8; artifact completion 11/11 | Includes two synthetic triage-only cases; completion is not correctness |
 | [M6 external evaluation](docs/M6_EXTERNAL_EVALUATION.md) | Real evaluation population 8: 8 PASS, 0 FAIL, 0 ERROR, 0 INCOMPLETE | Classification agreement only; includes synthetic evidence cases |
 | M6 controls | Positive passes; deliberate negative fails | Two controls excluded from the eight-case metric |
-| [M7 fresh-checkout validation](docs/M7_CI_CD.md) | 372 deterministic tests passed | Local verification; no hosted CI run claimed |
+| [M7 fresh-checkout validation](docs/M7_CI_CD.md) | 372 deterministic tests passed | Historical local checkpoint; current CI status is summarized below |
 | M8 final checkout validation | 399 deterministic tests passed; 1.0.0 wheel validated | Adds cleanup/demo tests; no new live target qualification |
 
 Qualification used **zero live model calls** and separate RWA and AgentGuard
@@ -164,6 +164,8 @@ planning, rationale, screenshots or all AutoQE reasoning.
 
 ## CI/CD
 
+GitHub-hosted CI has passed on the latest master checkpoint.
+
 The [workflow](.github/workflows/ci.yml) installs Python 3.13 dependencies, checks
 compilation/imports, runs tests and architectural guards, builds/validates a wheel
 and imports it after installation. PRs, pushes to `master` and manual dispatch
@@ -181,7 +183,7 @@ Tracked source/fixtures define inputs. Ignored `reports/` contains local outputs
 not public proof or planning context. `qualification/` contains separate controllers
 and fixtures; fault identities/expected labels must not enter runtime triage.
 Dependency ranges are not a locked supply chain. See the
-[public-sharing review](docs/PUBLIC_SHARING_REVIEW.md).
+[public release review](docs/PUBLIC_RELEASE_REVIEW.md).
 
 Report cleanup is opt-in and defaults to dry run:
 
@@ -229,6 +231,11 @@ an oracle. The evaluator worker is not an OS sandbox. Small populations cannot
 establish production-scale effectiveness.
 
 Package version: **1.0.0**. AutoQE is licensed under the [Apache License 2.0](LICENSE).
-Local validation does not establish hosted CI or release status. Frozen schema
-and historical producer versions stay unchanged. See [changelog](CHANGELOG.md),
-[release readiness](docs/RELEASE_READINESS.md) and [handoff](docs/PROJECT_HANDOFF.md).
+The repository is public and hosted CI has passed; the v1.0.0 tag/release has not
+been created. Frozen schema and historical producer versions stay unchanged.
+
+Supporting engineering evidence: [current handoff](docs/PROJECT_HANDOFF.md),
+[qualification history](docs/QUALIFICATION_HISTORY.md),
+[public release review](docs/PUBLIC_RELEASE_REVIEW.md),
+[release readiness](docs/RELEASE_READINESS.md) and [changelog](CHANGELOG.md).
+Individual qualification documents above retain the detailed experiment scope.

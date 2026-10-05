@@ -1,8 +1,9 @@
-# Public-sharing review
+# Public release review
 
-The M8 audit covered source files, proposed documentation/demo artifacts and the
-11 commits reachable at checkpoint `55d24f754c5ee9359d3ecc252e9b95fcb398ffe8`.
-It was a bounded content review; it did not rewrite repository history.
+This review covers tracked source code, documentation, demonstration artifacts,
+and reachable Git history prepared for the AutoQE v1.0.0 release. Its purpose is
+to reduce the risk of publishing credentials, private runtime evidence,
+machine-specific information, or misleading qualification artifacts.
 
 ## Findings
 
@@ -26,8 +27,10 @@ It was a bounded content review; it did not rewrite repository history.
 ## Public demo provenance
 
 The walkthrough copies approved inputs and selected qualified outputs.
-Execution/triage projections remove screenshot references and relocate content-preserving, LF-normalized
-API metadata with separate public and original-source hashes. Metric source labels are anonymized consistently while
+Execution/triage projections remove screenshot references and relocate
+content-preserving, LF-normalized API metadata. Public `sha256` values cover
+canonical LF bytes; `source_sha256` values retain original source-byte identities.
+Metric source labels are anonymized consistently while
 numerators/denominators remain unchanged. The external result retains its
 original request/source hashes. No fault identity, absolute local path, raw
 authentication traffic or unrestricted request/response body is included.
@@ -35,7 +38,7 @@ authentication traffic or unrestricted request/response body is included.
 validate models, linkage, hashes and prohibited data/path categories.
 
 Published projections are not byte-identical to the original records and were
-not newly evaluated by AgentGuard during M8. Historical producer versions retain
+not separately evaluated by AgentGuard as new runtime results. Historical producer versions retain
 their original meaning. Static examples do not represent new live execution.
 
 ## Scope and limits

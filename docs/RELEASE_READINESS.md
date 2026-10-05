@@ -1,8 +1,9 @@
 # v1.0.0 release readiness
 
 Distribution metadata and `autoqe.__version__` are `1.0.0`; the proposed release
-tag is `v1.0.0`. This document records local validation and release prerequisites,
-not proof of publication or a GitHub-hosted CI run.
+tag is `v1.0.0`. The repository is public, Apache-2.0 is present, and GitHub-hosted
+CI has passed on the latest master checkpoint. The v1.0.0 tag/release has not
+been created.
 
 ## Repository and release state
 
@@ -11,20 +12,20 @@ not proof of publication or a GitHub-hosted CI run.
 | Package version | 1.0.0; frozen schema version 1.0 unchanged |
 | Historical provenance | Original producer versions and source hashes retained |
 | License | [Apache License 2.0](../LICENSE) |
-| Repository | `https://github.com/onTechQuest/AutoQE.git`, configured as origin |
-| Hosted CI | Not established by local validation; inspect actual workflow results |
-| Public sharing | Bounded audit documented in [public-sharing review](PUBLIC_SHARING_REVIEW.md) |
+| Repository | Public: `https://github.com/onTechQuest/AutoQE.git`, configured as origin |
+| Hosted CI | Passed on the latest master checkpoint; standard deterministic checks only |
+| Public sharing | Bounded audit documented in [public release review](PUBLIC_RELEASE_REVIEW.md) |
 | External repositories | Separate pinned RWA and AgentGuard environments |
 | Operational tooling | Cleanup is opt-in housekeeping, not new QE functionality |
 
-Release publication requires reviewed changes and an actual passing hosted CI
-run for the release revision. Local test and packaging results alone do not
-establish either condition.
+Release publication remains a separate step. The release revision must retain
+reviewed changes and passing CI; hosted CI does not perform real RWA or AgentGuard
+qualification and does not itself create a tag or release.
 
 ## Demo provenance integrity
 
 The documentation review identified stale public hashes after LF normalization.
-All nine published artifact hashes now cover canonical LF bytes; files 01?03 also
+All nine published artifact hashes now cover canonical LF bytes; files 01-03 also
 have a final newline that was absent from the original sources. Public API evidence
 references in execution/triage now hash the LF copy they actually reference.
 Original source hashes remain separate and unchanged. The external evaluation's
@@ -69,5 +70,5 @@ evidence-based triage, metrics and external classification evaluation. It includ
 self-contained CI and a provenance-labeled guided demonstration.
 
 See [changelog](../CHANGELOG.md), [architecture](ARCHITECTURE.md),
-[demonstration](DEMO_GUIDE.md), [public-sharing review](PUBLIC_SHARING_REVIEW.md)
+[demonstration](DEMO_GUIDE.md), [public release review](PUBLIC_RELEASE_REVIEW.md)
 and [project handoff](PROJECT_HANDOFF.md) for evidence and limitations.

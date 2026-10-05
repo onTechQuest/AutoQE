@@ -43,7 +43,9 @@ negative control. Its population also includes synthetic evidence cases.
 
 Qualification used zero live model calls. Local fresh-checkout validation passed
 372 tests at M7 and 399 at M8. These bounded populations do not establish
-production-scale effectiveness, comprehensive reasoning quality or hosted CI success.
+production-scale effectiveness or comprehensive reasoning quality. GitHub-hosted
+CI has separately passed its standard deterministic checks on the latest master
+checkpoint; it does not execute real RWA or AgentGuard qualification.
 
 ## AgentGuard relationship
 
@@ -67,5 +69,5 @@ Live-model production qualification, richer semantic evaluation, RAG/MCP and
 multi-agent systems, visual/accessibility/performance/security adapters and
 enterprise integrations remain deferred. None is implied by the v1 results.
 
-[Guided demonstration](DEMO_GUIDE.md) ? [architecture](ARCHITECTURE.md) ?
-[static artifacts](../examples/demo/README.md) ? [release readiness](RELEASE_READINESS.md)
+[Guided demonstration](DEMO_GUIDE.md) | [architecture](ARCHITECTURE.md) |
+[static artifacts](../examples/demo/README.md) | [release readiness](RELEASE_READINESS.md)

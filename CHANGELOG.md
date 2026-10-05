@@ -13,7 +13,7 @@
   collision-resistant `autoqe_integration` namespace.
 - M7: deterministic CI, architecture boundaries and wheel verification.
 - M8: project overview, guided demo and architecture, provenance-labeled static evidence,
-  public-sharing review and opt-in, dry-run-first report cleanup.
+  public release review and opt-in, dry-run-first report cleanup.
 
 Package version is `1.0.0`; this changelog does not establish tag or publication status.
 Frozen schema and historical producer versions stay unchanged. Live-model

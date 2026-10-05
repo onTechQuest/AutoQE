@@ -1,6 +1,11 @@
 # Guided demo: REQ-PAY-001
 
-Use the **offline artifact tour** for a self-contained demonstration: skip live steps 1–2,
+The technical flow is:
+
+Requirements → BehavioralContract → TestSpecs → ExecutionRecord → TriageRecord
+→ Quality Metrics → External Evaluation.
+
+The **offline artifact tour** is the fastest self-contained demonstration: skip live steps 1–2,
 9 and 11, inspect their committed alternatives, and run extraction, planning,
 triage and synthetic metrics locally. Nothing in that route needs credentials,
 RWA, AgentGuard or a live model. The static failure and external result are
@@ -30,8 +35,8 @@ Each step identifies its output artifact and the engineering boundary it demonst
 
 ## 1. Start RWA safely — optional live route
 
-In a **second PowerShell terminal**, also at the AutoQE root, use the existing
-healthy-target context manager from M4. It creates a disposable pinned worktree,
+In a **second PowerShell terminal**, also at the AutoQE root, use the qualified
+isolated-target harness. It creates a disposable pinned worktree,
 reuses dependencies through a junction, starts Node with the loopback preload,
 checks actual listeners, and removes the isolated target on normal exit. No fault
 is applied. The canonical RWA tracked source/data stays untouched; worktree
@@ -123,14 +128,10 @@ Get-Content (Join-Path $Demo 'contract.json')
 Get-Content examples/rwa/plans/contracts/payment.json
 ```
 
-Artifact: generated contract alongside the approved M2 input. **Existing fixture
-limitation:** the fresh extraction says `Approved offline replay; no model was
-called.` while M2's checkpoint says `Approved offline M1 replay; no model was
-called.` All other parsed fields match. Planning fingerprints the complete input,
-so the fresh file does not match its approved replay key. Step 7 explicitly uses
-the M2 checkpoint; this is not an uninterrupted fresh-artifact chain.
-Fail-closed replay matching makes even metadata drift visible. This demo uses
-the approved checkpoint rather than weakening the boundary.
+Artifact: generated contract alongside the approved planning checkpoint. Planning
+uses the checkpoint because strict replay fingerprinting detects metadata drift
+in a freshly extracted artifact. See [Known qualification limitation](#known-qualification-limitation)
+for the exact difference; replay matching remains fail-closed.
 
 ## 7. Plan TestSpecs
 
@@ -190,7 +191,7 @@ not merely whether an HTTP request completed. Offline: inspect the historical ex
 ```powershell
 # Live route:
 Get-ChildItem (Join-Path $Demo 'api') -Recurse -Filter 'execution-*.json' | Get-Content
-# Self-contained static route: this is a real historical controlled failure:
+# Committed qualification artifact: an observed controlled failure:
 Get-Content examples/demo/05-execution-record.json
 Get-Content examples/demo/evidence/api-result-metadata.json
 ```
@@ -258,7 +259,7 @@ Get-Content (Join-Path $Demo 'triage.json')
 Get-Content examples/demo/06-triage-record.json
 ```
 
-Artifact: regenerated triage and original static projection. IDs/timestamps can
+Artifact: regenerated triage and the published triage projection. IDs/timestamps can
 differ; compare category and expected/observed references. A category must be
 supported by evidence. UNKNOWN is a valid honest result, not a hidden pass.
 
@@ -271,9 +272,9 @@ Get-Content (Join-Path $Demo 'synthetic-metrics/quality-metrics.json')
 Get-Content examples/demo/07-quality-metrics.json
 ```
 
-Artifacts: a newly calculated **synthetic fixture** report and a static real M5
-window projection. They are different populations, not metrics for this live demo.
-The synthetic traceability is 1/2; M5's historical window has its own denominators.
+Artifacts: a newly calculated **synthetic fixture** report and a published historical
+qualification-window projection. They are different populations, not metrics for this live demo.
+The synthetic traceability is 1/2; the historical qualification window has its own denominators.
 Metrics expose population and missing evidence. Fixture results and real
 qualification use distinct populations and must be interpreted separately.
 
@@ -285,8 +286,8 @@ The default command needs no evaluator:
 Get-Content examples/demo/08-external-evaluation.json
 ```
 
-Artifact: the real historical M6 result for the original M4 case; source hashes
-refer to original records, not regenerated M8 triage. If the separate qualified
+Artifact: the published external-evaluation result; source hashes identify the
+original qualified records, not the published triage projection or regenerated triage. If the separate qualified
 AgentGuard environment is explicitly available, optionally run:
 
 ```powershell
@@ -299,7 +300,7 @@ $AgentGuardPython = Join-Path $AgentGuardRoot '.venv/Scripts/python.exe'
 ```
 
 Expected artifacts: per-case results, metrics manifest/report and qualification
-summary. The output directory must not already exist. This reruns the fixed M6
+summary. The output directory must not already exist. This reruns the fixed external-evaluation
 population, not the new live demo records: eight classification passes, positive
 control passes, negative control fails. Independent evaluation is a provider
 boundary. This dimension measures label agreement, not all AI reasoning.
@@ -311,7 +312,7 @@ Get-Content docs/M4_CONTROLLED_FAULTS_AND_TRIAGE.md
 Get-Content examples/demo/README.md
 ```
 
-Artifact: qualification method and truthful projection notes. Historical M4 used
+Artifact: qualification method and truthful projection notes. The controlled-defect qualification used
 paired healthy/faulty targets with identical TestSpec hashes, three product faults,
 separate labels and no controller identity in runtime triage. No fault injection
 is needed for this demonstration. Healthy false positives and controlled missed
@@ -361,9 +362,27 @@ exit 2 means invalid options or safety/I/O refusal. An I/O failure after deletio
 starts may leave partial progress; rerun a preview. This is not protection against
 a hostile concurrent filesystem writer and no automatic execution cleanup is added.
 
-## Verification scope
+## Known qualification limitation
 
-M8 runs CLI help, offline extraction, approved-checkpoint planning, static-evidence
-triage, synthetic metrics and artifact tests. Live startup/execution commands are
-checked against the existing harness/provider code, but are not rerun in M8.
-No new live UI/API or AgentGuard qualification, GitHub-hosted CI or release is claimed.
+Fresh extraction records `Approved offline replay; no model was called.` while
+the approved planning checkpoint records `Approved offline M1 replay; no model
+was called.` All other parsed fields match. Planning fingerprints the complete
+input, including limitations, so the freshly extracted file does not match its
+approved replay key. Step 7 uses the qualified checkpoint; the demonstration is
+not an uninterrupted fresh-artifact chain. This preserves strict matching rather
+than silently accepting metadata drift. See [planning qualification](M2_RISK_BASED_PLANNING.md)
+for the approved-input boundary.
+
+## Qualification scope
+
+Deterministic local qualification is complete. The final fresh-checkout suite
+passed 399 tests, and GitHub-hosted CI has passed on the latest master checkpoint.
+Zero live model calls were required for deterministic qualification.
+
+Live RWA execution remains optional and separately provisioned. AgentGuard
+external qualification also requires its separate pinned repository/interpreter.
+Standard CI runs neither real RWA execution nor real AgentGuard qualification;
+its success does not replace either external procedure. Published qualification
+artifacts retain their historical provenance and are not new live demo results.
+See [Qualification history](QUALIFICATION_HISTORY.md) for recorded populations
+and [Project handoff](PROJECT_HANDOFF.md) for current boundaries.
