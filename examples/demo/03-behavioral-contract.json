@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "record_id": "f1024be0-a039-442f-a686-450d14f98876",
+  "created_at": "2026-09-30T12:10:00Z",
+  "source_ids": ["md-examples-rwa-requirements-payments"],
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+  },
+  "producer": "autoqe-replay",
+  "producer_version": "0.1.0",
+  "limitations": ["Approved offline M1 replay; no model was called."],
+  "contract_id": "contract-payment-valid-001",
+  "project_id": "cypress-rwa",
+  "requirement_ids": ["REQ-PAY-001"],
+  "title": "Submit a valid payment",
+  "intent": "An authenticated account holder can send a valid payment to an eligible recipient.",
+  "risk_level": "HIGH",
+  "preconditions": ["The sender is authenticated."],
+  "business_conditions": ["The recipient is eligible to receive a payment.", "The payment amount is positive."],
+  "expected_behaviors": [
+    {"behavior_id": "payment-recorded-once", "description": "A valid payment is recorded once after submission."},
+    {"behavior_id": "payment-reflected", "description": "A successful payment is reflected in sender and recipient account state."}
+  ],
+  "forbidden_behaviors": [
+    {"behavior_id": "invalid-payment-not-recorded", "description": "An invalid payment request does not create a transaction."}
+  ],
+  "state_transitions": [
+    {"from_state": "Pending payment", "event": "Valid payment submitted", "to_state": "Recorded payment"}
+  ],
+  "authorization_constraints": [],
+  "assumptions": [],
+  "unknowns": ["Insufficient-funds handling, fees, and payment limits are not specified."]
+}

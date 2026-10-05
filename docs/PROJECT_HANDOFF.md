@@ -780,11 +780,58 @@ metadata files). No live model calls or external qualification ran. RWA and
 AgentGuard remained clean/pinned, ports 3000/3001 stopped, and M0/runtime code
 unchanged. No commit or push was made; no GitHub-hosted run occurred.
 
-## Next Milestone Boundary
+## M8: Portfolio, demo and release preparation
 
-M7 is limited to deterministic CI and packaging checks. M8 is not started.
-Release automation, new evaluation dimensions, deployment and enterprise
-transports require separate authorization.
+Preflight: clean `55d24f754c5ee9359d3ecc252e9b95fcb398ffe8`, M-1 through M7
+committed, no remote configured. M8 polishes the README, architecture, one-page
+portfolio overview and PowerShell demo guide. No new QE capability is added.
+
+`examples/demo/` contains provenance-labeled inputs and historical M4/M5/M6
+outputs. A real failed payment record links to its original PRODUCT_DEFECT triage
+and real external classification result. Projections remove screenshot references,
+relocate byte-identical hashed API metadata and anonymize metric source labels.
+Original observations/statuses/IDs remain; no live M8 success is fabricated.
+The full M5 metrics window differs from the selected case. M6 request hashes
+refer to original historical records, not M8 projections.
+
+Command verification found existing metadata drift between fresh M1 extraction
+and the approved M2 checkpoint: one limitation string differs. Exact planning
+replay fingerprints reject the fresh contract. The guide explicitly uses the
+approved checkpoint and labels that discontinuity; runtime matching was not
+weakened. UI execution is headless; the positive payment TestSpec runs BOTH.
+
+`scripts/cleanup_reports.py` is operational housekeeping only. Default is dry run;
+confirmed deletion requires an explicit age/all selection. It is restricted to
+this checkout's reports tree, validates ancestors and target identity, refuses
+symlinks/reparse points and protected nested source/checkouts/venvs, removes only
+selected files/empty directories and retains the reports root. It is not automatic
+execution cleanup or a defense against hostile concurrent writers.
+
+Package metadata and `autoqe.__version__` are prepared as `1.0.0`; frozen M0 and
+historical component producer versions remain unchanged. No license was selected,
+remote configured, hosted CI run, commit, tag or push performed. See
+[release readiness](RELEASE_READINESS.md) for owner decisions, and
+[public-sharing review](PUBLIC_SHARING_REVIEW.md) for bounded audit findings.
+
+Final M8 verification: 45 focused checks passed (23 cleanup, four demo, 18 wheel);
+399 tests passed in one complete fresh-checkout suite without historical reports.
+The 1.0.0 wheel built, passed package-boundary/source checks, and imported from
+an isolated installed target with matching version metadata. All 39 local Markdown
+links, PowerShell demo syntax, seven CLI help commands and the offline demo stages
+passed validation. Public-sharing audit of source/new files and 11 historical
+commits found no real secret. No generated files are staged; diff check passed.
+
+RWA is clean at `9dfcb9869533ce8a8963c556facc0d80457f9d39`; AgentGuard is clean
+at `ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`. Ports 3000/3001 have no listeners.
+Live model calls: zero. M0 unchanged; no real external qualification was rerun.
+M8 implementation is locally complete and ready for review/commit. Public release
+still requires the owner's licensing decision and publication/hosted-CI steps.
+
+## Final v1 boundary
+
+M8 closes the v1 portfolio/demo milestone. No further milestone is started.
+Live-model production qualification, release publication, broader semantics,
+deployment and enterprise transports require separate authorization.
 
 ## Deferred / V2 Capabilities
 

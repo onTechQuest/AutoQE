@@ -1,0 +1,21 @@
+# Changelog
+
+## v1.0.0 — prepared, unreleased
+
+- M-1/M0: pinned reference qualification and frozen contracts/interfaces.
+- M1: approved Markdown/context extraction, grounding and replay provider.
+- M2: risk-based planning and governed UI/API/BOTH TestSpecs.
+- M3/hardening: local deterministic execution, semantic assertions, completeness
+  checks and bounded evidence.
+- M4: evidence-based triage and separate controlled-fault qualification.
+- M5: observational, denominator-explicit quality metrics.
+- M6: generic external evaluation, isolated AgentGuard provider and
+  collision-resistant `autoqe_integration` namespace.
+- M7: deterministic CI, architecture boundaries and wheel verification.
+- M8: portfolio/demo/architecture, provenance-labeled static evidence,
+  public-sharing review and opt-in, dry-run-first report cleanup.
+
+Package metadata is prepared as `1.0.0`; no tag, release or push is created.
+Frozen schema and historical producer versions stay unchanged. Live-model
+production qualification and v2 features are not included. Licensing remains an
+owner decision.

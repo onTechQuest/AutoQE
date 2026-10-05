@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "record_id": "a1024be0-a039-442f-a686-450d14f98871",
+  "created_at": "2026-09-30T12:00:00Z",
+  "source_ids": ["m1-reference-qualification"],
+  "source_fingerprints": {},
+  "producer": "autoqe",
+  "producer_version": "0.1.0",
+  "limitations": ["Reference qualification profile only; no adapter execution is included."],
+  "project_id": "cypress-rwa",
+  "project_name": "Cypress Real World App",
+  "requirements": {
+    "provider": "LOCAL_FILES",
+    "locations": ["examples/rwa/requirements"]
+  },
+  "application": {
+    "ui_base_url": "http://localhost:3000",
+    "api_base_url": "http://localhost:3001"
+  },
+  "runtime": {
+    "language": "Node.js",
+    "language_version_required": "22.20.0",
+    "language_version_accepted": "^22.0.0 || ^24.0.0",
+    "language_version_qualified": "22.23.3",
+    "package_manager": "Yarn Classic",
+    "package_manager_version": "1.22.22"
+  },
+  "environment": {
+    "reset_supported": true,
+    "reset_adapter": "rwa.yarn_db_seed_dev",
+    "network_scope": "LOCAL_ONLY",
+    "readiness_urls": ["http://localhost:3000", "http://localhost:3001"],
+    "reset_identity": "sha256:C2449435BBF44BCEF412A178FB51B8561D3C2D7BA9FC55B10D0B8A09EA66C3A1"
+  },
+  "authentication": {
+    "strategy": "TEST_FIXTURE",
+    "setup_adapter": "rwa.seeded-user-authentication"
+  },
+  "execution_capabilities": {
+    "ui": "AVAILABLE",
+    "api": "AVAILABLE"
+  },
+  "api_contract": {
+    "location": "backend route implementations and cypress/tests/api",
+    "format": "SOURCE_AND_TESTS"
+  },
+  "project_adapter": {
+    "adapter_id": "cypress-rwa",
+    "adapter_version": "1.0"
+  },
+  "reference_target": {
+    "repository_url": "https://github.com/cypress-io/cypress-realworld-app",
+    "revision": "9dfcb9869533ce8a8963c556facc0d80457f9d39"
+  }
+}

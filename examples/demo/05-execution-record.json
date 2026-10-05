@@ -1,0 +1,185 @@
+{
+  "assertion_results": [
+    {
+      "assertion_id": "payment-recorded-once",
+      "evidence_refs": [
+        {
+          "description": "Sanitized API status and assertion metadata; no request/response bodies or headers.",
+          "kind": "API_RESULT_METADATA",
+          "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+          "uri": "examples/demo/evidence/api-result-metadata.json"
+        }
+      ],
+      "expected": "A valid payment is recorded once after submission.",
+      "observed": "playwright: No executed, supported assertion was reported for this expected outcome. | httpx: {\"expected_amount_minor\": 3500, \"expected_state\": \"complete\", \"recipient_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}, \"sender_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}}",
+      "status": "FAILED"
+    },
+    {
+      "assertion_id": "payment-reflected",
+      "evidence_refs": [
+        {
+          "description": "Sanitized API status and assertion metadata; no request/response bodies or headers.",
+          "kind": "API_RESULT_METADATA",
+          "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+          "uri": "examples/demo/evidence/api-result-metadata.json"
+        }
+      ],
+      "expected": "A successful payment is reflected in sender and recipient account state.",
+      "observed": "playwright: No executed, supported assertion was reported for this expected outcome. | httpx: {\"expected_amount_minor\": 3500, \"expected_state\": \"complete\", \"recipient_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}, \"sender_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}}",
+      "status": "FAILED"
+    }
+  ],
+  "completed_at": "2026-10-01T02:25:50.877945Z",
+  "correlation_id": "f1024be0-a039-442f-a686-450d14f98876",
+  "created_at": "2026-10-01T02:25:50.882706Z",
+  "duration_ms": 8643.549700034782,
+  "environment_identity": {
+    "provider-1.actor_count": "2",
+    "provider-1.api_host": "localhost:3001",
+    "provider-1.api_status": "200",
+    "provider-1.authentication_setup_status": "PASSED",
+    "provider-1.authentication_strategy": "TEST_FIXTURE",
+    "provider-1.capability_status": "PASSED",
+    "provider-1.credential_source": "RWA_TEST_PASSWORD",
+    "provider-1.fixture_source": "rwa.testData.users",
+    "provider-1.fixture_status": "PASSED",
+    "provider-1.history_fixture_created": "false",
+    "provider-1.network_scope": "LOCAL_ONLY",
+    "provider-1.readiness_status": "PASSED",
+    "provider-1.reference_revision": "9dfcb9869533ce8a8963c556facc0d80457f9d39",
+    "provider-1.reference_status": "PASSED",
+    "provider-1.reset_adapter": "rwa.testData.seed",
+    "provider-1.reset_identity": "sha256:C2449435BBF44BCEF412A178FB51B8561D3C2D7BA9FC55B10D0B8A09EA66C3A1",
+    "provider-1.reset_status": "PASSED",
+    "provider-1.setup_status": "PASSED",
+    "provider-1.tracked_worktree": "clean",
+    "provider-1.ui_host": "localhost:3000",
+    "provider-1.ui_status": "200",
+    "provider-2.actor_count": "2",
+    "provider-2.api_host": "localhost:3001",
+    "provider-2.api_status": "200",
+    "provider-2.authentication_setup_status": "PASSED",
+    "provider-2.authentication_strategy": "TEST_FIXTURE",
+    "provider-2.capability_status": "PASSED",
+    "provider-2.credential_source": "RWA_TEST_PASSWORD",
+    "provider-2.fixture_source": "rwa.testData.users",
+    "provider-2.fixture_status": "PASSED",
+    "provider-2.history_fixture_created": "false",
+    "provider-2.network_scope": "LOCAL_ONLY",
+    "provider-2.readiness_status": "PASSED",
+    "provider-2.reference_revision": "9dfcb9869533ce8a8963c556facc0d80457f9d39",
+    "provider-2.reference_status": "PASSED",
+    "provider-2.reset_adapter": "rwa.testData.seed",
+    "provider-2.reset_identity": "sha256:C2449435BBF44BCEF412A178FB51B8561D3C2D7BA9FC55B10D0B8A09EA66C3A1",
+    "provider-2.reset_status": "PASSED",
+    "provider-2.setup_status": "PASSED",
+    "provider-2.tracked_worktree": "clean",
+    "provider-2.ui_host": "localhost:3000",
+    "provider-2.ui_status": "200"
+  },
+  "evidence_refs": [
+    {
+      "description": "Sanitized API status and assertion metadata; no request/response bodies or headers.",
+      "kind": "API_RESULT_METADATA",
+      "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+      "uri": "examples/demo/evidence/api-result-metadata.json"
+    }
+  ],
+  "execution_id": "3fc304a251dc4807ab5345a41af1a9e6",
+  "failure_category": "ASSERTION_FAILURE",
+  "limitations": [
+    "Approved offline M1 replay; no model was called.",
+    "Unresolved contract unknown: Insufficient-funds handling, fees, and payment limits are not specified.",
+    "No explicit numeric/comparative boundary was specified; no boundary TestSpec was planned.",
+    "Missing assertion: payment-recorded-once.",
+    "Missing assertion: payment-reflected.",
+    "Step did not complete successfully: pay-positive-5.",
+    "Unresolved assertion: payment-recorded-once.",
+    "Unresolved assertion: payment-reflected.",
+    "Sanitized static M4 projection: screenshot references omitted; API evidence relocated without changing bytes. No live M8 execution."
+  ],
+  "observed_outcomes": [
+    "playwright: RWA displayed the payment submission confirmation.",
+    "playwright: displayed payment amount did not match the submitted amount",
+    "httpx: httpx used the local authenticated RWA API; raw payloads, cookies, and headers were not retained."
+  ],
+  "producer": "autoqe-execution",
+  "producer_version": "0.3.0",
+  "project_id": "cypress-rwa",
+  "provider": "playwright+httpx",
+  "provider_version": "playwright=1.63.0;httpx=0.28.1",
+  "record_id": "9a12eb84-328d-4e97-b61b-e05da279a8cb",
+  "schema_version": "1.0",
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+  },
+  "source_ids": [
+    "md-examples-rwa-requirements-payments"
+  ],
+  "started_at": "2026-10-01T02:25:33.376301Z",
+  "status": "FAILED",
+  "step_results": [
+    {
+      "evidence_refs": [],
+      "observed": "playwright: AUTHENTICATE",
+      "status": "PASSED",
+      "step_id": "pay-positive-1"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "playwright: SELECT_RECIPIENT",
+      "status": "PASSED",
+      "step_id": "pay-positive-2"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "playwright: ENTER_PAYMENT_AMOUNT",
+      "status": "PASSED",
+      "step_id": "pay-positive-3"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "playwright: SUBMIT_VALID_PAYMENT",
+      "status": "PASSED",
+      "step_id": "pay-positive-4"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "playwright: Expected UI state was not observed.",
+      "status": "FAILED",
+      "step_id": "pay-positive-5"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "httpx: AUTHENTICATE",
+      "status": "PASSED",
+      "step_id": "pay-positive-1"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "httpx: SELECT_RECIPIENT",
+      "status": "PASSED",
+      "step_id": "pay-positive-2"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "httpx: ENTER_PAYMENT_AMOUNT",
+      "status": "PASSED",
+      "step_id": "pay-positive-3"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "httpx: SUBMIT_VALID_PAYMENT",
+      "status": "PASSED",
+      "step_id": "pay-positive-4"
+    },
+    {
+      "evidence_refs": [],
+      "observed": "httpx: ASSERT_PAYMENT_OUTCOME",
+      "status": "FAILED",
+      "step_id": "pay-positive-5"
+    }
+  ],
+  "test_data_reset_identity": "sha256:C2449435BBF44BCEF412A178FB51B8561D3C2D7BA9FC55B10D0B8A09EA66C3A1;sha256:C2449435BBF44BCEF412A178FB51B8561D3C2D7BA9FC55B10D0B8A09EA66C3A1",
+  "test_id": "contract-payment-valid-001-positive"
+}

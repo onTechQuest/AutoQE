@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "autoqe"
-version = "0.1.0"
-description = "Vendor-neutral Quality Engineering orchestration contracts"
+version = "1.0.0"
+description = "Vendor-neutral Quality Engineering orchestration with governed artifacts and external evaluation"
 requires-python = ">=3.13"
 dependencies = ["pydantic>=2.10,<3", "httpx>=0.28,<1", "playwright==1.63.0"]
 

@@ -1,0 +1,187 @@
+[
+  {
+    "cleanup_requirements": [
+      "Restore or remove test data through the future ProjectAdapter after execution; M2 performs no cleanup."
+    ],
+    "contract_id": "contract-payment-valid-001",
+    "correlation_id": "f1024be0-a039-442f-a686-450d14f98876",
+    "created_at": "2026-09-30T12:10:00Z",
+    "evidence_requirements": [
+      {
+        "availability": "AVAILABLE",
+        "description": "Capture the user-visible state relevant to the selected contract outcomes.",
+        "evidence_type": "VISIBLE_UI_STATE"
+      },
+      {
+        "availability": "AVAILABLE",
+        "description": "Capture sanitized result/status metadata relevant to the selected contract outcomes.",
+        "evidence_type": "API_RESULT_METADATA"
+      }
+    ],
+    "expected_outcomes": [
+      {
+        "description": "A valid payment is recorded once after submission.",
+        "outcome_id": "payment-recorded-once"
+      },
+      {
+        "description": "A successful payment is reflected in sender and recipient account state.",
+        "outcome_id": "payment-reflected"
+      }
+    ],
+    "intent": "A valid payment is recorded once after submission.; A successful payment is reflected in sender and recipient account state.",
+    "limitations": [
+      "Approved offline M1 replay; no model was called.",
+      "Unresolved contract unknown: Insufficient-funds handling, fees, and payment limits are not specified.",
+      "No explicit numeric/comparative boundary was specified; no boundary TestSpec was planned."
+    ],
+    "preconditions": [
+      "The sender is authenticated."
+    ],
+    "priority": 2,
+    "producer": "autoqe-planner",
+    "producer_version": "0.2.0",
+    "project_id": "cypress-rwa",
+    "record_id": "5556cd60-5b44-59b5-89d4-817de1745b54",
+    "requirement_ids": [
+      "REQ-PAY-001"
+    ],
+    "risk_level": "HIGH",
+    "scenario_type": "POSITIVE",
+    "schema_version": "1.0",
+    "source_fingerprints": {
+      "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+    },
+    "source_ids": [
+      "md-examples-rwa-requirements-payments"
+    ],
+    "steps": [
+      {
+        "action": "AUTHENTICATE",
+        "data_ref": null,
+        "step_id": "pay-positive-1",
+        "target": "sender",
+        "value": null
+      },
+      {
+        "action": "SELECT_ENTITY",
+        "data_ref": null,
+        "step_id": "pay-positive-2",
+        "target": "eligible recipient",
+        "value": null
+      },
+      {
+        "action": "ENTER_VALUE",
+        "data_ref": "payment-amount",
+        "step_id": "pay-positive-3",
+        "target": "positive payment amount",
+        "value": null
+      },
+      {
+        "action": "SUBMIT",
+        "data_ref": null,
+        "step_id": "pay-positive-4",
+        "target": "valid payment",
+        "value": null
+      },
+      {
+        "action": "ASSERT",
+        "data_ref": null,
+        "step_id": "pay-positive-5",
+        "target": "resulting account state",
+        "value": null
+      }
+    ],
+    "tags": [
+      "autoqe-m2",
+      "positive"
+    ],
+    "test_data_requirements": [
+      "The sender is authenticated.",
+      "The recipient is eligible to receive a payment.",
+      "The payment amount is positive."
+    ],
+    "test_id": "contract-payment-valid-001-positive",
+    "test_layer": "BOTH",
+    "title": "Submit a valid payment (positive)"
+  },
+  {
+    "cleanup_requirements": [
+      "Restore or remove test data through the future ProjectAdapter after execution; M2 performs no cleanup."
+    ],
+    "contract_id": "contract-payment-valid-001",
+    "correlation_id": "f1024be0-a039-442f-a686-450d14f98876",
+    "created_at": "2026-09-30T12:10:00Z",
+    "evidence_requirements": [
+      {
+        "availability": "AVAILABLE",
+        "description": "Capture sanitized result/status metadata relevant to the selected contract outcomes.",
+        "evidence_type": "API_RESULT_METADATA"
+      }
+    ],
+    "expected_outcomes": [
+      {
+        "description": "An invalid payment request does not create a transaction.",
+        "outcome_id": "invalid-payment-not-recorded"
+      }
+    ],
+    "intent": "An invalid payment request does not create a transaction.",
+    "limitations": [
+      "Approved offline M1 replay; no model was called.",
+      "Unresolved contract unknown: Insufficient-funds handling, fees, and payment limits are not specified.",
+      "No explicit numeric/comparative boundary was specified; no boundary TestSpec was planned."
+    ],
+    "preconditions": [
+      "The sender is authenticated."
+    ],
+    "priority": 2,
+    "producer": "autoqe-planner",
+    "producer_version": "0.2.0",
+    "project_id": "cypress-rwa",
+    "record_id": "eee28979-cbad-5175-a680-277669ced7ab",
+    "requirement_ids": [
+      "REQ-PAY-001"
+    ],
+    "risk_level": "HIGH",
+    "scenario_type": "NEGATIVE",
+    "schema_version": "1.0",
+    "source_fingerprints": {
+      "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+    },
+    "source_ids": [
+      "md-examples-rwa-requirements-payments"
+    ],
+    "steps": [
+      {
+        "action": "AUTHENTICATE",
+        "data_ref": null,
+        "step_id": "pay-negative-1",
+        "target": "sender",
+        "value": null
+      },
+      {
+        "action": "SUBMIT",
+        "data_ref": null,
+        "step_id": "pay-negative-2",
+        "target": "invalid payment request",
+        "value": null
+      },
+      {
+        "action": "ASSERT",
+        "data_ref": null,
+        "step_id": "pay-negative-3",
+        "target": "transaction not created",
+        "value": null
+      }
+    ],
+    "tags": [
+      "autoqe-m2",
+      "negative"
+    ],
+    "test_data_requirements": [
+      "An input that exercises: An invalid payment request does not create a transaction."
+    ],
+    "test_id": "contract-payment-valid-001-negative",
+    "test_layer": "API",
+    "title": "Submit a valid payment (negative)"
+  }
+]

@@ -97,7 +97,7 @@ python scripts/verify_wheel.py dist
 ```
 
 Then install the single wheel using its actual filename:
-`python -m pip install --no-deps --force-reinstall dist/autoqe-0.1.0-py3-none-any.whl`
+`python -m pip install --no-deps --force-reinstall dist/autoqe-1.0.0-py3-none-any.whl`
 and repeat the isolated import command. Keep the version in that filename aligned
 with pyproject. Use a fresh output directory after version changes; stale wheels
 cause validation to fail. `build/`, `dist/` and bytecode are ignored. No generated

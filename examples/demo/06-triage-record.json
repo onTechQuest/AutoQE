@@ -1,0 +1,35 @@
+{
+  "classification": "PRODUCT_DEFECT",
+  "correlation_id": "f1024be0-a039-442f-a686-450d14f98876",
+  "created_at": "2026-10-01T02:25:51.452490Z",
+  "execution_id": "3fc304a251dc4807ab5345a41af1a9e6",
+  "expected_behavior_reference": "payment-recorded-once",
+  "limitations": [
+    "Deterministic evidence classification; no inferred component-level root cause.",
+    "Sanitized static M4 projection: screenshot references omitted; API evidence relocated without changing bytes. No live M8 execution."
+  ],
+  "observed_behavior_reference": "assertion:payment-recorded-once",
+  "producer": "autoqe-triage",
+  "producer_version": "0.4.0",
+  "recommended_next_action": "Investigate the observed product behavior using the retained assertion evidence.",
+  "record_id": "3fe7dedb-2a77-48fb-abf2-b196445a1d96",
+  "schema_version": "1.0",
+  "source_fingerprints": {
+    "md-examples-rwa-requirements-payments": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8"
+  },
+  "source_ids": [
+    "md-examples-rwa-requirements-payments"
+  ],
+  "summary": "Supported execution reached the target after verified readiness, reset, and fixture setup. Assertion payment-recorded-once contradicts the expected behavior: playwright: No executed, supported assertion was reported for this expected outcome. | httpx: {\"expected_amount_minor\": 3500, \"expected_state\": \"complete\", \"recipient_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}, \"sender_view\": {\"count\": 1, \"transactions\": [{\"amount_minor\": 350, \"identity_matches\": true, \"identity_sha256\": \"52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb\", \"is_payment\": true, \"recipient_matches\": true, \"sender_matches\": true, \"state\": \"complete\"}]}}",
+  "supporting_evidence_refs": [
+    {
+      "description": "Sanitized API status and assertion metadata; no request/response bodies or headers.",
+      "kind": "API_RESULT_METADATA",
+      "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+      "uri": "examples/demo/evidence/api-result-metadata.json"
+    }
+  ],
+  "suspected_component": null,
+  "test_id": "contract-payment-valid-001-positive",
+  "triage_id": "9c37be689ea64dc0b1d21b5d3eba72d6"
+}

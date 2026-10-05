@@ -1,0 +1,100 @@
+{
+  "events": [
+    {
+      "operation": "login",
+      "status": 200
+    },
+    {
+      "operation": "select_fixture_recipient",
+      "status": "LOCAL_FIXTURE"
+    },
+    {
+      "operation": "prepare_payment_intent",
+      "status": "READY"
+    },
+    {
+      "baseline_matching_records": 0,
+      "operation": "create_payment",
+      "resulting_matching_records": 1,
+      "status": 200,
+      "transaction_reference_sha256": "52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb"
+    },
+    {
+      "measurements": {
+        "expected_amount_minor": 3500,
+        "expected_state": "complete",
+        "recipient_view": {
+          "count": 1,
+          "transactions": [
+            {
+              "amount_minor": 350,
+              "identity_matches": true,
+              "identity_sha256": "52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb",
+              "is_payment": true,
+              "recipient_matches": true,
+              "sender_matches": true,
+              "state": "complete"
+            }
+          ]
+        },
+        "sender_view": {
+          "count": 1,
+          "transactions": [
+            {
+              "amount_minor": 350,
+              "identity_matches": true,
+              "identity_sha256": "52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb",
+              "is_payment": true,
+              "recipient_matches": true,
+              "sender_matches": true,
+              "state": "complete"
+            }
+          ]
+        }
+      },
+      "operation": "assert_payment_properties",
+      "outcome_id": "payment-recorded-once",
+      "passed": false
+    },
+    {
+      "measurements": {
+        "expected_amount_minor": 3500,
+        "expected_state": "complete",
+        "recipient_view": {
+          "count": 1,
+          "transactions": [
+            {
+              "amount_minor": 350,
+              "identity_matches": true,
+              "identity_sha256": "52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb",
+              "is_payment": true,
+              "recipient_matches": true,
+              "sender_matches": true,
+              "state": "complete"
+            }
+          ]
+        },
+        "sender_view": {
+          "count": 1,
+          "transactions": [
+            {
+              "amount_minor": 350,
+              "identity_matches": true,
+              "identity_sha256": "52dcfd40c4f24b28d107e822c73620737d4d32044328e74b5753851051227beb",
+              "is_payment": true,
+              "recipient_matches": true,
+              "sender_matches": true,
+              "state": "complete"
+            }
+          ]
+        }
+      },
+      "operation": "assert_payment_properties",
+      "outcome_id": "payment-reflected",
+      "passed": false
+    }
+  ],
+  "network_scope": "LOCAL_ONLY",
+  "provider": "httpx",
+  "test_id": "contract-payment-valid-001-positive"
+}

@@ -1,0 +1,621 @@
+{
+  "limitations": [
+    "Observational metrics only; no aggregate score, thresholds, or release decision.",
+    "External labels and no-live attestations are trusted qualification inputs; hashes identify bytes, not independent truth.",
+    "Reuses the saved real M4 qualification window; no new target execution.",
+    "Two explicitly synthetic triage-only cases are included in classification accuracy and task completion, not executability.",
+    "M4 runtime execution and triage used no model provider; approved TestSpecs came from offline replay. This is a no-live runtime-window attestation, not historical generation token telemetry.",
+    "Static M5 report projection across the full historical window, not only this one demo case. Controller source labels anonymized; source hashes retained. No M8 rerun."
+  ],
+  "metrics": [
+    {
+      "availability": "AVAILABLE",
+      "definition": "Unique explicitly referenced requirement IDs / unique requirement IDs in selected BehavioralContracts.",
+      "denominator": 1,
+      "details": {
+        "denominator_ids": [
+          "REQ-PAY-001"
+        ],
+        "numerator_ids": [
+          "REQ-PAY-001"
+        ],
+        "uncovered_requirement_ids": []
+      },
+      "limitations": [
+        "Identifier traceability only; not semantic or full behavioral coverage. Malformed specs cannot establish linkage."
+      ],
+      "metric_id": "requirement_traceability",
+      "numerator": 1,
+      "sample_size": 1,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 1.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Unique valid TestSpec inputs / all unique selected TestSpec inputs, including malformed JSON.",
+      "denominator": 3,
+      "details": {
+        "denominator_ids": [
+          "negative",
+          "positive",
+          "unsupported"
+        ],
+        "invalid_inputs": {},
+        "numerator_ids": [
+          "negative",
+          "positive",
+          "unsupported"
+        ]
+      },
+      "limitations": [],
+      "metric_id": "testspec_schema_validity",
+      "numerator": 3,
+      "sample_size": 3,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 1.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Executable runtime evaluation attempts / runtime evaluation attempts; assertion failure can be executable.",
+      "denominator": 9,
+      "details": {
+        "denominator_ids": [
+          "case-01-faulty",
+          "case-01-healthy",
+          "non-product-DATA_FAILURE",
+          "non-product-ENVIRONMENT_FAILURE",
+          "non-product-UNSUPPORTED_BEHAVIOR",
+          "case-03-faulty",
+          "case-03-healthy",
+          "case-02-faulty",
+          "case-02-healthy"
+        ],
+        "exclusion_counts": {
+          "setup_or_capability_not_established": 2,
+          "unsupported_or_skipped": 1
+        },
+        "exclusions": {
+          "non-product-DATA_FAILURE": "setup_or_capability_not_established",
+          "non-product-ENVIRONMENT_FAILURE": "setup_or_capability_not_established",
+          "non-product-UNSUPPORTED_BEHAVIOR": "unsupported_or_skipped"
+        },
+        "numerator_ids": [
+          "case-01-faulty",
+          "case-01-healthy",
+          "case-03-faulty",
+          "case-03-healthy",
+          "case-02-faulty",
+          "case-02-healthy"
+        ]
+      },
+      "limitations": [
+        "Attempt-based, not unique-TestSpec or pass rate. Synthetic evidence fixtures excluded. Composite final outcomes are evaluated; interrupted component outcomes may be resolved by another provider."
+      ],
+      "metric_id": "test_executability",
+      "numerator": 6,
+      "sample_size": 9,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 0.6666666666666666
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Healthy cases signaling assertion/product/test failure / externally healthy cases with successful setup and supported semantics.",
+      "denominator": 3,
+      "details": {
+        "denominator_ids": [
+          "case-01-healthy",
+          "case-03-healthy",
+          "case-02-healthy"
+        ],
+        "exclusions": {},
+        "numerator_ids": []
+      },
+      "limitations": [
+        "Provider errors without product/test failure signals are not false positives; consult executability alongside this rate."
+      ],
+      "metric_id": "healthy_false_positive_rate",
+      "numerator": 0,
+      "sample_size": 3,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 0.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Controlled faults with successful setup, meaningful provider execution and a referenced observed assertion mismatch / controlled fault cases attempted.",
+      "denominator": 3,
+      "details": {
+        "attempted_faults": [
+          "case-01-faulty",
+          "case-03-faulty",
+          "case-02-faulty"
+        ],
+        "denominator_ids": [
+          "case-01-faulty",
+          "case-03-faulty",
+          "case-02-faulty"
+        ],
+        "detected_faults": [
+          "case-01-faulty",
+          "case-03-faulty",
+          "case-02-faulty"
+        ],
+        "missed_faults": [],
+        "numerator_ids": [
+          "case-01-faulty",
+          "case-03-faulty",
+          "case-02-faulty"
+        ]
+      },
+      "limitations": [
+        "Bounded external fault sample; no statistical generalization or root-cause inference. A concrete mismatch can detect a fault even when other outcomes remain unresolved; executability reports that incompleteness separately."
+      ],
+      "metric_id": "controlled_defect_detection",
+      "numerator": 3,
+      "sample_size": 3,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 1.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Actual classification matching external expected label / externally labeled triage cases, including missing results as incorrect.",
+      "denominator": 8,
+      "details": {
+        "comparisons": {
+          "case-01-faulty": {
+            "actual": "PRODUCT_DEFECT",
+            "expected": "PRODUCT_DEFECT",
+            "kind": "RUNTIME"
+          },
+          "case-02-faulty": {
+            "actual": "PRODUCT_DEFECT",
+            "expected": "PRODUCT_DEFECT",
+            "kind": "RUNTIME"
+          },
+          "case-03-faulty": {
+            "actual": "PRODUCT_DEFECT",
+            "expected": "PRODUCT_DEFECT",
+            "kind": "RUNTIME"
+          },
+          "non-product-DATA_FAILURE": {
+            "actual": "DATA_FAILURE",
+            "expected": "DATA_FAILURE",
+            "kind": "RUNTIME"
+          },
+          "non-product-ENVIRONMENT_FAILURE": {
+            "actual": "ENVIRONMENT_FAILURE",
+            "expected": "ENVIRONMENT_FAILURE",
+            "kind": "RUNTIME"
+          },
+          "non-product-TEST_DEFECT": {
+            "actual": "TEST_DEFECT",
+            "expected": "TEST_DEFECT",
+            "kind": "SYNTHETIC"
+          },
+          "non-product-UNKNOWN": {
+            "actual": "UNKNOWN",
+            "expected": "UNKNOWN",
+            "kind": "SYNTHETIC"
+          },
+          "non-product-UNSUPPORTED_BEHAVIOR": {
+            "actual": "UNSUPPORTED_BEHAVIOR",
+            "expected": "UNSUPPORTED_BEHAVIOR",
+            "kind": "RUNTIME"
+          }
+        },
+        "confusion_counts": {
+          "DATA_FAILURE": {
+            "DATA_FAILURE": 1
+          },
+          "ENVIRONMENT_FAILURE": {
+            "ENVIRONMENT_FAILURE": 1
+          },
+          "PRODUCT_DEFECT": {
+            "PRODUCT_DEFECT": 3
+          },
+          "TEST_DEFECT": {
+            "TEST_DEFECT": 1
+          },
+          "UNKNOWN": {
+            "UNKNOWN": 1
+          },
+          "UNSUPPORTED_BEHAVIOR": {
+            "UNSUPPORTED_BEHAVIOR": 1
+          }
+        },
+        "correct": 8,
+        "denominator_ids": [
+          "case-01-faulty",
+          "non-product-DATA_FAILURE",
+          "non-product-ENVIRONMENT_FAILURE",
+          "non-product-TEST_DEFECT",
+          "non-product-UNKNOWN",
+          "non-product-UNSUPPORTED_BEHAVIOR",
+          "case-03-faulty",
+          "case-02-faulty"
+        ],
+        "incorrect": 0,
+        "numerator_ids": [
+          "case-01-faulty",
+          "non-product-DATA_FAILURE",
+          "non-product-ENVIRONMENT_FAILURE",
+          "non-product-TEST_DEFECT",
+          "non-product-UNKNOWN",
+          "non-product-UNSUPPORTED_BEHAVIOR",
+          "case-03-faulty",
+          "case-02-faulty"
+        ],
+        "per_class_support": {
+          "DATA_FAILURE": 1,
+          "ENVIRONMENT_FAILURE": 1,
+          "PRODUCT_DEFECT": 3,
+          "TEST_DEFECT": 1,
+          "UNKNOWN": 1,
+          "UNSUPPORTED_BEHAVIOR": 1
+        }
+      },
+      "limitations": [
+        "Small selected qualification sample; synthetic cases are explicitly identified, not observed application defects."
+      ],
+      "metric_id": "triage_accuracy",
+      "numerator": 8,
+      "sample_size": 8,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 1.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Cases producing all explicitly required valid artifacts and terminal execution results / evaluation cases attempted.",
+      "denominator": 11,
+      "details": {
+        "denominator_ids": [
+          "case-01-faulty",
+          "case-01-healthy",
+          "non-product-DATA_FAILURE",
+          "non-product-ENVIRONMENT_FAILURE",
+          "non-product-TEST_DEFECT",
+          "non-product-UNKNOWN",
+          "non-product-UNSUPPORTED_BEHAVIOR",
+          "case-03-faulty",
+          "case-03-healthy",
+          "case-02-faulty",
+          "case-02-healthy"
+        ],
+        "incomplete_stages": {},
+        "numerator_ids": [
+          "case-01-faulty",
+          "case-01-healthy",
+          "non-product-DATA_FAILURE",
+          "non-product-ENVIRONMENT_FAILURE",
+          "non-product-TEST_DEFECT",
+          "non-product-UNKNOWN",
+          "non-product-UNSUPPORTED_BEHAVIOR",
+          "case-03-faulty",
+          "case-03-healthy",
+          "case-02-faulty",
+          "case-02-healthy"
+        ],
+        "stage_incomplete_counts": {}
+      },
+      "limitations": [
+        "Completion is not correctness: PASSED, FAILED, ERROR and SKIPPED may be terminal; INCOMPLETE or missing completion timestamp is not. Synthetic triage-only tasks require only their declared stages."
+      ],
+      "metric_id": "task_completion",
+      "numerator": 11,
+      "sample_size": 11,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "ratio",
+      "value": 1.0
+    },
+    {
+      "availability": "AVAILABLE",
+      "definition": "Observed live model tokens for the explicitly bounded evidence window; no text-length estimation.",
+      "denominator": null,
+      "details": {
+        "live_model_calls": 0,
+        "mode": "NO_LIVE_PROCESSING"
+      },
+      "limitations": [],
+      "metric_id": "ai_token_usage",
+      "numerator": null,
+      "sample_size": 0,
+      "source_refs": [
+        "contract",
+        "manifest",
+        "case-01-faulty-execution",
+        "case-01-faulty-triage",
+        "case-01-healthy-execution",
+        "case-01-healthy-triage",
+        "negative",
+        "non-product-DATA_FAILURE-execution",
+        "non-product-DATA_FAILURE-triage",
+        "non-product-ENVIRONMENT_FAILURE-execution",
+        "non-product-ENVIRONMENT_FAILURE-triage",
+        "non-product-TEST_DEFECT-execution",
+        "non-product-TEST_DEFECT-triage",
+        "non-product-UNKNOWN-execution",
+        "non-product-UNKNOWN-triage",
+        "non-product-UNSUPPORTED_BEHAVIOR-execution",
+        "non-product-UNSUPPORTED_BEHAVIOR-triage",
+        "case-03-faulty-execution",
+        "case-03-faulty-triage",
+        "case-03-healthy-execution",
+        "case-03-healthy-triage",
+        "case-02-faulty-execution",
+        "case-02-faulty-triage",
+        "case-02-healthy-execution",
+        "case-02-healthy-triage",
+        "positive",
+        "qualification",
+        "unsupported",
+        "usage"
+      ],
+      "unit": "tokens",
+      "value": 0
+    },
+    {
+      "availability": "UNAVAILABLE",
+      "definition": "Passing independent AgentGuard evaluations / AgentGuard evaluations performed.",
+      "denominator": null,
+      "details": {},
+      "limitations": [
+        "AgentGuard evaluation integration is planned for M6 and no AgentGuard evaluation dataset/result exists for this metrics window."
+      ],
+      "metric_id": "agentguard_pass_rate",
+      "numerator": null,
+      "sample_size": 0,
+      "source_refs": [],
+      "unit": "ratio",
+      "value": null
+    }
+  ],
+  "project_id": "cypress-rwa",
+  "schema_version": "1.0",
+  "sources": {
+    "case-01-faulty-execution": "62dcbf0430c54b5b425c14881e6b640e636e5a5bd1c3d771510d2020c0feba21",
+    "case-01-faulty-triage": "9100e428b6bf78e23b1708edf45f99c622209c6e69bc119aa15126a5f74087be",
+    "case-01-healthy-execution": "dde4ee6e580a435b4c17e78bed8262824dca8c9fd2c620298e2678155d26572c",
+    "case-01-healthy-triage": "68bf1b69006ebba831eef4ab99aa1e151e923ec7b1a5791efacd1201783ff0f7",
+    "case-02-faulty-execution": "64a035030365a9fff23aa5bbbf99504f9c5dd8bed6d8736043844503fbd5a1fb",
+    "case-02-faulty-triage": "042f3acaef9df386c6e0d85e892ec265532d7f660768751410001f709b77b833",
+    "case-02-healthy-execution": "1b74affb50279c3aa780e578bb03e12a50f313ccb39e3a2cd2e9ced4f5bdc3bd",
+    "case-02-healthy-triage": "c8e310642f1cc5962554ea7cb8b774013515fa8004e75a58a49e74bbb2404e5c",
+    "case-03-faulty-execution": "58404b2325e4303355fdf8cd00c103a1516ba55a52c90b999866eb75d95cef2d",
+    "case-03-faulty-triage": "738361feba94b96ab9abe7a03d36804533efb40227c6f29cf56435266922d9ed",
+    "case-03-healthy-execution": "2b6c03523a845b744bcdfb0cd23ba10e732af2b6cd401c0f3dbca2636f91ff0c",
+    "case-03-healthy-triage": "6dd1bde4b01e5157b771a0149ae2538a22c99a5837ecc062ed063a0e99578e52",
+    "contract": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4",
+    "manifest": "6449b2a721abbf36a2db96dc545bac1ac237aefeab30231ce4a2fc0ac7e4962f",
+    "negative": "4151a9377fc24f21890da009b13ef18c5b8c14240fa52a49c2f86169fed6e204",
+    "non-product-DATA_FAILURE-execution": "dc6eecb10fd3e89695f3deeee2d93da1246b411dff83a55c3ac0dfa0e598b8cb",
+    "non-product-DATA_FAILURE-triage": "16aab70e69a45d846933401b238f035525b5880bec37f8f4e9f5b4432d0c5773",
+    "non-product-ENVIRONMENT_FAILURE-execution": "c46ee67d9a81a483fe208f1a4176c2b01b431f96bef177d35b6a2d1793a890de",
+    "non-product-ENVIRONMENT_FAILURE-triage": "cf126183fc65ef48672eb4e7ce0f4e027fd29870a3a6101fe5706447c8a07452",
+    "non-product-TEST_DEFECT-execution": "d2f68a88a1c200c79b8e9163ab73880b3cc0fb3d994de34e02e848a3dabbacc2",
+    "non-product-TEST_DEFECT-triage": "8f88eccc02145d73269efb3204138de7c1cb733f7608117a309f502f057dfd9e",
+    "non-product-UNKNOWN-execution": "9ef6f19e97b1dae5fbc343c01394e371728e60f673d2f94d15cc59942b7f5733",
+    "non-product-UNKNOWN-triage": "f5e72fb289d6a4733853f6f8b132a0f9d4f4666400feb5b25dd138a6998113f2",
+    "non-product-UNSUPPORTED_BEHAVIOR-execution": "265e62d677043c485839e1841af0c64c339edda5d0f23fc4232cfd04e8779477",
+    "non-product-UNSUPPORTED_BEHAVIOR-triage": "d66b8cc4e8543f2d936a326d7e29b1e990ebff1851485f0ecad04db8a61740e8",
+    "positive": "28f46e8f2a776523c0c38666ee92cecec3c8939dc6a509f1925760030afc0930",
+    "qualification": "d7da6a6c9044f4af0ad9997fc1e68950d3a5b01037d3734e980e840e1e69e4e3",
+    "unsupported": "0b58485c5ca7c789355c2db17783334f77fe5e5364630d66c419a1aec9908783",
+    "usage": "f24cf4220180739dff12ed6d5d7806691ab33fe55e146be7dbcd37538cf7b61a"
+  },
+  "window_id": "m4-qualification-20260930"
+}
