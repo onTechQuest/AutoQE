@@ -18,15 +18,17 @@ Business intent → structured contract → TestSpec → execution evidence → 
 | `06-triage-record.json` | Sanitized projection of that execution's original M4 triage | PRODUCT_DEFECT, referenced mismatch, no invented component root cause |
 | `07-quality-metrics.json` | Sanitized projection of the full historical M5 window | Different denominators; not metrics over this one selected case; AgentGuard was unavailable at M5 |
 | `08-external-evaluation.json` | Qualified example; unchanged real M6 result for this original M4 case | Classification agreement only, with original source hashes and external oracle provenance |
-| `evidence/api-result-metadata.json` | Qualified example; unchanged hashed, bounded API evidence | Measurements only; no raw bodies, credentials, cookies or screenshots |
+| `evidence/api-result-metadata.json` | Qualified example; content-preserving LF-normalized, bounded API evidence | Measurements only; no raw bodies, credentials, cookies or screenshots |
 
-`provenance.json` records original source hashes, exported byte hashes and exact
+`provenance.json` defines `sha256` as the public LF-file hash and `source_sha256`
+as the original pre-projection source-byte hash. It records these separate hashes and exact
 transformations. Source labels in the metrics report were anonymized; screenshot
 references in execution/triage were removed and an explicit limitation added.
-API evidence URIs point to the committed copy, with its original hash intact.
+API evidence URIs hash the canonical LF public copy. Original source hashes remain
+separate in provenance; line-ending normalization changes bytes, not measurements.
 IDs, timestamps, statuses, observations and producer versions retain their
 historical meaning. Original source reports are private, ignored and not required
-to inspect or validate this directory. Git preserves these files' exact bytes.
+to inspect or validate this directory. Git publishes canonical LF bytes for this directory.
 
 The external result's request hash covers the **original** records, not these
 edited projections. It must not be presented as independent evaluation of an

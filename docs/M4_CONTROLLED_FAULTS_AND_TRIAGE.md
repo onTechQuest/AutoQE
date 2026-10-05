@@ -103,7 +103,7 @@ Run the bounded Windows qualification controller with an unused output directory
 
 ```powershell
 .venv/Scripts/python.exe scripts/qualify_m4.py `
-  --rwa-root C:/Projects/autoqe-reference-rwa `
+  --rwa-root ../autoqe-reference-rwa `
   --output reports/<new-run-directory>
 ```
 

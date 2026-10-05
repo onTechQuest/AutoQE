@@ -10,7 +10,7 @@ performs deterministic triage, measures QE effectiveness, and supports independe
 external evaluation. V1 demonstrates this chain using approved replay outputs,
 a bounded reference adapter, Playwright and httpx—not live LLM calls.
 
-**Start here:** [portfolio overview](docs/PORTFOLIO_OVERVIEW.md) ·
+**Start here:** [project overview](docs/PROJECT_OVERVIEW.md) ·
 [guided demo](docs/DEMO_GUIDE.md) · [static artifacts](examples/demo/README.md) ·
 [architecture](docs/ARCHITECTURE.md)
 
@@ -204,7 +204,7 @@ source/checkouts/venvs. Stop writers first; preserve needed evidence before dele
 | Bounded UI/API execution; structured evidence | Visual AI, self-healing, performance/security/accessibility adapters |
 | Deterministic triage; controlled fault qualification | Richer semantic planning/rationale evaluation |
 | Quality metrics; external evaluation; AgentGuard provider | Production analytics, enterprise gateways/APIs |
-| Deterministic CI; reproducible replay; portfolio demo | Jira/TestRail/observability, dashboards, cloud deployment |
+| Deterministic CI; reproducible replay; guided demo | Jira/TestRail/observability, dashboards, cloud deployment |
 
 ## Repository structure
 
@@ -228,8 +228,7 @@ Triage trusts normalized evidence; hashes identify bytes rather than authenticat
 an oracle. The evaluator worker is not an OS sandbox. Small populations cannot
 establish production-scale effectiveness.
 
-Package metadata is prepared for **1.0.0**, proposed tag **v1.0.0**. No tag, release
-or push has been created. No LICENSE has been selected; licensing is an owner
-decision before release. No remote or hosted CI run is claimed. Frozen schema
+Package version: **1.0.0**. AutoQE is licensed under the [Apache License 2.0](LICENSE).
+Local validation does not establish hosted CI or release status. Frozen schema
 and historical producer versions stay unchanged. See [changelog](CHANGELOG.md),
 [release readiness](docs/RELEASE_READINESS.md) and [handoff](docs/PROJECT_HANDOFF.md).

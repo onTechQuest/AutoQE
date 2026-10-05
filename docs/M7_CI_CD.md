@@ -2,8 +2,8 @@
 
 M7 adds deterministic installation, test, distribution and architecture checks.
 It adds no runtime testing intelligence. **CI PASS is not full real-world RWA or
-AgentGuard qualification.** M8, deployment, release automation and publishing
-are outside this milestone.
+AgentGuard qualification.** Deployment, release automation and publishing
+are outside standard CI.
 
 ## Workflow
 

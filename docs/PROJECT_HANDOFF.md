@@ -4,7 +4,7 @@
 
 AutoQE is a vendor-neutral autonomous Quality Engineering orchestration framework.
 
-It converts product intent and project context into grounded behavioral contracts and risk-based, vendor-neutral TestSpecs, delegates deterministic execution to existing test frameworks, normalizes execution evidence, and can later be independently evaluated by AgentGuard.
+It converts product intent and project context into grounded behavioral contracts and risk-based, vendor-neutral TestSpecs, delegates deterministic execution to existing test frameworks, normalizes execution evidence, and supports independent external classification evaluation through AgentGuard.
 
 AutoQE is not intended to replace Playwright, API frameworks, CI/CD systems, test management products, observability platforms, or other enterprise engineering systems.
 
@@ -12,48 +12,26 @@ AutoQE is not intended to replace Playwright, API frameworks, CI/CD systems, tes
 
 ### AutoQE
 
-Path:
+Implementation is complete through M8. The M8 checkpoint is `4e7a9c0`, M7 is
+`55d24f7`, M6 is `fa1a161`, M5 is `073507c`, and M4 is `d7ce21b`.
+Pre-M4 execution hardening is recorded at `29eadfa`.
 
-C:\Projects\AutoQE
+The sections below retain milestone-specific qualification results and limitations.
+Statements about unavailable capabilities within those sections describe that
+checkpoint; [Architecture](ARCHITECTURE.md) describes the completed v1 design.
 
-Current completed implementation through:
+### Reference application
 
-M6 - Provider-neutral External Evaluation (qualified in the working tree; not committed).
-The preceding M5 checkpoint is committed as `073507c`; M4 is `d7ce21b`.
+Cypress Real World App is a separately provisioned external checkout, pinned to
+`9dfcb9869533ce8a8963c556facc0d80457f9d39`. Its Cypress tests remain independent
+benchmark evidence and are excluded from extraction/planning context.
 
-Current M3 commit:
+### Independent evaluator
 
-683e997
-
-Pre-M4 hardening checkpoint: `29eadfa`.
-
-### Reference Application
-
-Cypress Real World App (RWA)
-
-Path:
-
-C:\Projects\autoqe-reference-rwa
-
-Qualified and pinned revision:
-
-9dfcb9869533ce8a8963c556facc0d80457f9d39
-
-RWA is an external system under test and is not part of AutoQE core.
-
-Its existing Cypress tests are an independent human-authored benchmark and must not be used as generation/planning context.
-
-### Independent Evaluator
-
-AgentGuard
-
-Path:
-
-C:\Projects\AgentGuard
-
-AgentGuard remains a separate project.
-
-AutoQE must not absorb or directly couple itself to AgentGuard internals. Future integration should use an external artifact adapter.
+AgentGuard is a separate repository and Python environment, qualified at
+`ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`. Integration uses the provider-neutral
+external artifact boundary; AutoQE core neither imports AgentGuard internals nor
+requires it as a package dependency.
 
 ## Core Architecture
 
@@ -633,7 +611,7 @@ Qualification and verification:
   `ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`.
 - Ports 3000/3001 had no listeners before or after M5; live model calls: zero.
   Reports and fresh-checkout output are ignored. Frozen M0 contracts/interfaces/
-  schemas are unchanged; `git diff --check` passed. No commit was made.
+  schemas are unchanged; `git diff --check` passed.
 
 Limitations: one payment requirement and three controlled faults cannot establish
 broad behavioral coverage or statistical significance. External labels and usage
@@ -648,7 +626,7 @@ reports are intentionally not fresh-checkout dependencies.
 
 ## M6 - Provider-neutral External Evaluation
 
-Status: COMPLETE in the working tree; not committed. Qualified 2026-10-01.
+Status: COMPLETE. Qualified 2026-10-01.
 
 Architecture and commands: [M6 external evaluation](M6_EXTERNAL_EVALUATION.md).
 
@@ -713,8 +691,8 @@ Verification:
 - Fresh-checkout-style copy without `.git` or historical reports: all 148 focused
   tests passed. Unit tests require neither AgentGuard nor RWA.
 - AutoQE wheel built successfully from that copy and imported from an isolated
-  target directory. The environment initially lacked setuptools; a temporary
-  isolated build dependency download was approved after sandbox network denial.
+  target directory. An isolated temporary build environment supplied setuptools when it was absent
+  from the local environment.
   Neither existing project environment nor AgentGuard was installed/modified by
   that packaging check.
 - One final complete AutoQE suite: 354 passed.
@@ -736,7 +714,7 @@ Verification:
 - AutoQE extraction/planning/execution/triage and frozen M0 contracts/interfaces/
   schemas are unchanged. No AgentGuard imports/dependencies in AutoQE core.
   Runtime reports/build verification outputs are ignored. `git diff --check`
-  passed. No commit was made.
+  passed.
 
 Only triage-classification agreement was independently evaluated. Contract
 grounding, planning quality, execution integrity, rationale quality, screenshots,
@@ -778,18 +756,18 @@ in a fresh local clone/environment. Wheel build/content checks and isolated
 installed-wheel imports passed (48 core files, eight integration files, four
 metadata files). No live model calls or external qualification ran. RWA and
 AgentGuard remained clean/pinned, ports 3000/3001 stopped, and M0/runtime code
-unchanged. No commit or push was made; no GitHub-hosted run occurred.
+unchanged. No GitHub-hosted run was part of that local validation.
 
-## M8: Portfolio, demo and release preparation
+## M8: Documentation, demonstration and release preparation
 
 Preflight: clean `55d24f754c5ee9359d3ecc252e9b95fcb398ffe8`, M-1 through M7
-committed, no remote configured. M8 polishes the README, architecture, one-page
-portfolio overview and PowerShell demo guide. No new QE capability is added.
+committed, no remote configured. M8 polishes the README, architecture, technical
+project overview and PowerShell demo guide. No new QE capability is added.
 
 `examples/demo/` contains provenance-labeled inputs and historical M4/M5/M6
 outputs. A real failed payment record links to its original PRODUCT_DEFECT triage
 and real external classification result. Projections remove screenshot references,
-relocate byte-identical hashed API metadata and anonymize metric source labels.
+relocate content-preserving LF-normalized API metadata with separate source/public hashes and anonymize metric source labels.
 Original observations/statuses/IDs remain; no live M8 success is fabricated.
 The full M5 metrics window differs from the selected case. M6 request hashes
 refer to original historical records, not M8 projections.
@@ -808,34 +786,36 @@ selected files/empty directories and retains the reports root. It is not automat
 execution cleanup or a defense against hostile concurrent writers.
 
 Package metadata and `autoqe.__version__` are prepared as `1.0.0`; frozen M0 and
-historical component producer versions remain unchanged. No license was selected,
-remote configured, hosted CI run, commit, tag or push performed. See
-[release readiness](RELEASE_READINESS.md) for owner decisions, and
+historical component producer versions remain unchanged. M8 local validation did
+not establish hosted CI or publication status. The project
+now includes an Apache 2.0 license and a configured repository remote; see
+[release readiness](RELEASE_READINESS.md) for current prerequisites and
 [public-sharing review](PUBLIC_SHARING_REVIEW.md) for bounded audit findings.
 
 Final M8 verification: 45 focused checks passed (23 cleanup, four demo, 18 wheel);
 399 tests passed in one complete fresh-checkout suite without historical reports.
 The 1.0.0 wheel built, passed package-boundary/source checks, and imported from
-an isolated installed target with matching version metadata. All 39 local Markdown
-links, PowerShell demo syntax, seven CLI help commands and the offline demo stages
+an isolated installed target with matching version metadata. The 39 local Markdown
+links present at that checkpoint, PowerShell demo syntax, seven CLI help commands
+and the offline demo stages
 passed validation. Public-sharing audit of source/new files and 11 historical
 commits found no real secret. No generated files are staged; diff check passed.
 
 RWA is clean at `9dfcb9869533ce8a8963c556facc0d80457f9d39`; AgentGuard is clean
 at `ee104f90fe9c0c23f320ab110fdd2c9adf20d37c`. Ports 3000/3001 have no listeners.
 Live model calls: zero. M0 unchanged; no real external qualification was rerun.
-M8 implementation is locally complete and ready for review/commit. Public release
-still requires the owner's licensing decision and publication/hosted-CI steps.
+M8 local implementation checks passed. Publication and hosted-CI status are
+separate from these results.
 
 ## Final v1 boundary
 
-M8 closes the v1 portfolio/demo milestone. No further milestone is started.
-Live-model production qualification, release publication, broader semantics,
-deployment and enterprise transports require separate authorization.
+V1 includes the governed QE pipeline, deterministic CI and guided demonstration.
+Live-model production qualification, broader semantics, deployment and enterprise
+transports remain outside the implemented scope.
 
 ## Deferred / V2 Capabilities
 
-Do not implement during current v1 milestones unless explicitly authorized:
+The following capabilities are outside v1:
 
 - RAG / KnowledgeProvider
 - MCP / ToolProvider
@@ -853,11 +833,11 @@ Do not implement during current v1 milestones unless explicitly authorized:
 - broad enterprise governance
 - second reference application
 
-These may be documented as future architecture but must not silently enter v1 implementation.
+These are architectural extension possibilities, not implemented capabilities.
 
-## Portfolio Relationship
+## System relationship
 
-The intended portfolio story is:
+The reference target, orchestrator and evaluator have distinct roles:
 
 Product under test: Cypress RWA
         ^
@@ -875,6 +855,4 @@ AutoQE answers:
 
 How can AI perform Quality Engineering work reliably?
 
-A future Enterprise AgentOps project will address:
-
-How do we operate many enterprise agents safely at scale?
+Production operations and enterprise-scale agent governance are outside this project's v1 scope.

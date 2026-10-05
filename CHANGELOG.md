@@ -12,10 +12,10 @@
 - M6: generic external evaluation, isolated AgentGuard provider and
   collision-resistant `autoqe_integration` namespace.
 - M7: deterministic CI, architecture boundaries and wheel verification.
-- M8: portfolio/demo/architecture, provenance-labeled static evidence,
+- M8: project overview, guided demo and architecture, provenance-labeled static evidence,
   public-sharing review and opt-in, dry-run-first report cleanup.
 
-Package metadata is prepared as `1.0.0`; no tag, release or push is created.
+Package version is `1.0.0`; this changelog does not establish tag or publication status.
 Frozen schema and historical producer versions stay unchanged. Live-model
-production qualification and v2 features are not included. Licensing remains an
-owner decision.
+production qualification and v2 features are not included. The project uses the
+[Apache License 2.0](LICENSE).

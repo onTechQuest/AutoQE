@@ -1,7 +1,4 @@
 # Synthetic source artifacts carry byte hashes; retain their qualified bytes.
 qualification/m6/fixtures/*.json text eol=lf
-# Published demo provenance and evidence hashes refer to exact copied bytes.
-examples/demo/** -text
-
-# Recruiter/demo artifacts use stable LF bytes.
+# Public demo hashes cover canonical LF bytes; original hashes remain separate.
 examples/demo/** text eol=lf

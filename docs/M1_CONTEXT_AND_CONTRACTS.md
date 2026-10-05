@@ -1,5 +1,8 @@
 # M1 Context and Behavioral Contracts
 
+This document records the milestone scope. See [Architecture](ARCHITECTURE.md)
+for the completed v1 implementation.
+
 ## Flow
 
 ```mermaid

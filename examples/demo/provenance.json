@@ -1,68 +1,73 @@
 {
   "artifacts": {
     "01-requirement.md": {
-      "changes": "Unchanged copy; historical producer metadata retained.",
+      "changes": "Content unchanged; CRLF normalized to LF and final newline added. Historical metadata and original source hash retained separately.",
       "label": "illustrative input",
-      "sha256": "c2abe5d13b2f66153713fbc8a548bac97cb054524f399633803670581d5b3f31",
+      "sha256": "febfe6bb30d3a498af3d0e937bf48def4c33047157d06abf4bfa9bb16e9c34c8",
       "source": "payments.md",
       "source_sha256": "c2abe5d13b2f66153713fbc8a548bac97cb054524f399633803670581d5b3f31"
     },
     "02-project-profile.json": {
-      "changes": "Unchanged copy; historical producer metadata retained.",
+      "changes": "Content unchanged; CRLF normalized to LF and final newline added. Historical metadata and original source hash retained separately.",
       "label": "qualified example",
-      "sha256": "286e16b8652a5b82e3b1e49e44c108e50e5185af1981207c24ba33f8ca013abf",
+      "sha256": "e2c0d6fffcc61ee7a4fee87004a1569e4ac7fd376616cbbeedbaad3df39326a0",
       "source": "project-profile.json",
       "source_sha256": "286e16b8652a5b82e3b1e49e44c108e50e5185af1981207c24ba33f8ca013abf"
     },
     "03-behavioral-contract.json": {
-      "changes": "Unchanged copy; historical producer metadata retained.",
+      "changes": "Content unchanged; CRLF normalized to LF and final newline added. Historical metadata and original source hash retained separately.",
       "label": "qualified example",
-      "sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4",
+      "sha256": "2d98c55a9c1f1bfba5606a93932f90dd03b4d67049bddd1d16507bf521611e64",
       "source": "payment.json",
       "source_sha256": "00070a8baf41e82462868333004b895840251525f988ef0dc298720fffc2d5b4"
     },
     "04-testspecs.json": {
-      "changes": "JSON array of two existing TestSpecs; individual objects unchanged.",
+      "changes": "JSON array of two existing TestSpecs; individual objects unchanged. Published bytes use canonical LF line endings.",
       "label": "qualified example",
-      "sha256": "6d7e006825dd6c93793ee6323bdfd7b5abeffd31d1654d4dbacd887ba0dd9c52",
+      "sha256": "18ad1a9c7b27d0b247b11573c23b9a83477a6e5c04ba08b29c67c5681fd0bd5f",
       "source": "examples/rwa/execution/payment.json + invalid-payment.json"
     },
     "05-execution-record.json": {
-      "changes": "Removed screenshot references; relocated hashed API evidence; added projection limitation. Original IDs/status/observations retained.",
+      "changes": "Removed screenshot references; relocated API evidence and hashed its published LF bytes; added projection limitation. Original IDs/status/observations retained. Original record hash retained separately.",
       "label": "sanitized projection",
-      "sha256": "836de1be1b0466b58e336bccd42332ca0adb98a3bf9ec7a9721caae63698f84c",
+      "sha256": "b4fb184e8ecdb477064d3f407c286442b81574ddb3ffa98f8148b0b3fa27096c",
       "source": "execution-3fc304a251dc4807ab5345a41af1a9e6.json",
       "source_sha256": "64a035030365a9fff23aa5bbbf99504f9c5dd8bed6d8736043844503fbd5a1fb"
     },
     "06-triage-record.json": {
-      "changes": "Removed screenshot references; relocated hashed API evidence; added projection limitation. Original IDs/status/observations retained.",
+      "changes": "Removed screenshot references; relocated API evidence and hashed its published LF bytes; added projection limitation. Original IDs/status/observations retained. Original record hash retained separately.",
       "label": "sanitized projection",
-      "sha256": "ccbbdf6b5fe8ca9ad15706bae42c85eda0679469d0077622a34a830885d21c72",
+      "sha256": "669cf1b2469b390c2a0ca7a630ff21f2b29bbea3582df82906861a7573ead935",
       "source": "e91e888fdcdb47baa9f23fddaa690179.json",
       "source_sha256": "042f3acaef9df386c6e0d85e892ec265532d7f660768751410001f709b77b833"
     },
     "07-quality-metrics.json": {
-      "changes": "Anonymized three controller labels consistently; added scope limitation. Numerical results unchanged.",
+      "changes": "Anonymized three controller labels consistently; added scope limitation. Numerical results unchanged. Published bytes use canonical LF line endings.",
       "label": "sanitized projection",
-      "sha256": "bf0986186e0810002271667bad543bc2440e06970f583729494658eaf06e9c3b",
+      "sha256": "82fe35ff2c8bba52dfb67ac4d0e07e5a9ffb44ae465feaa4db39a1657da23d1e",
       "source": "quality-metrics.json",
       "source_sha256": "f118d2cb786ba4bd345bc83be5c671d07bf4a33af9cad8698e04854ecf2ae78f"
     },
     "08-external-evaluation.json": {
-      "changes": "Unchanged normalized real AgentGuard result. Request hashes refer to original historical artifacts, not M8 projections.",
+      "changes": "Normalized real AgentGuard result content unchanged; public bytes use LF. Request hashes identify original historical artifacts, not public projections; original result hash retained separately.",
       "label": "qualified example",
-      "sha256": "dd7ee8f7670020e2aa1e3ddf30e8cc6e634971514836a4b915db2c987250e7f5",
+      "sha256": "92a4aca91c8763ab19bf9b178065233440c377ffb804a4a4a56893e3712ea5a3",
       "source": "9aeed2a8-e33d-5f90-b1d2-99d3626efe19.json",
       "source_sha256": "dd7ee8f7670020e2aa1e3ddf30e8cc6e634971514836a4b915db2c987250e7f5"
     },
     "evidence/api-result-metadata.json": {
-      "changes": "Unchanged bounded metadata; original hash preserved; no screenshot exported.",
+      "changes": "Bounded metadata content unchanged; CRLF normalized to LF. Public byte hash and original source hash recorded separately; no screenshot exported.",
       "label": "qualified example",
-      "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+      "sha256": "589cdc5b3a78aa22d96d3701a8ea1f88642f30ae3e657fc45b65785bd6ff8312",
       "source": "api-result-metadata.json",
       "source_sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd"
     }
   },
   "description": "Static historical qualification walkthrough, assembled during M8; no new RWA or AgentGuard run.",
+  "hash_semantics": {
+    "evidence_refs": "References to examples/demo/evidence/ hash the published LF evidence bytes. External-evaluation request hashes and lineage retain their original qualified-source meaning.",
+    "sha256": "SHA-256 of the named published demo file, including its canonical LF line endings and final newline.",
+    "source_sha256": "SHA-256 of original source bytes before public projection or LF normalization; never replaced by a public-file hash."
+  },
   "schema_version": "1.0"
 }

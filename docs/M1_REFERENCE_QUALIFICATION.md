@@ -10,7 +10,7 @@ This is a feasibility result only. No AutoQE framework, agent, RAG, MCP, v2 feat
 ## Reference target and environment
 
 - Upstream: `https://github.com/cypress-io/cypress-realworld-app`
-- Local target: `C:\Projects\autoqe-reference-rwa`
+- Local target: a separately provisioned `autoqe-reference-rwa` checkout
 - Pinned commit: `9dfcb9869533ce8a8963c556facc0d80457f9d39` (detached HEAD; commit dated 2026-09-29)
 - OS: Windows 11 Home, build 26200
 - Git: 2.42.0.windows.2
@@ -68,6 +68,6 @@ Use a versioned, declarative ProjectProfile for this reference target. Keep it l
 
 ## Decision
 
-**CONDITIONAL GO.** Cypress RWA is qualified as a deterministic AutoQE v1 reference target at the pinned commit. Node 22.23.3 caused no observed incompatibility. Startup, reset, independent Python UI/API smoke, and selected native UI/API suites passed. The condition is that the AutoQE-to-AgentGuard artifact boundary and ProjectProfile schema must be defined in AutoQE before claiming direct integration: the current workspace contains no such contract, and AgentGuard intentionally has no native Cypress adapter. This is a known, bounded adapter/schema decision, not a blocker to using RWA as the reference application. No work beyond M-1 qualification is authorized by this result.
+**CONDITIONAL GO.** Cypress RWA is qualified as a deterministic AutoQE v1 reference target at the pinned commit. Node 22.23.3 caused no observed incompatibility. Startup, reset, independent Python UI/API smoke, and selected native UI/API suites passed. The condition is that the AutoQE-to-AgentGuard artifact boundary and ProjectProfile schema must be defined in AutoQE before claiming direct integration: the current workspace contains no such contract, and AgentGuard intentionally has no native Cypress adapter. This is a known, bounded adapter/schema decision, not a blocker to using RWA as the reference application. This result covers M-1 qualification only.
 
 Non-blocking upstream notices during qualification: a Vite plugin peer-range warning, stale Browserslist data, deprecated Cypress Electron browser, and the removed `experimentalStudio` option.

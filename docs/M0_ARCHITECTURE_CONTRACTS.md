@@ -1,5 +1,8 @@
 # M0 Architecture and Contracts
 
+This document records the milestone scope. See [Architecture](ARCHITECTURE.md)
+for the completed v1 implementation.
+
 ## Scope and lifecycle
 
 AutoQE v1 is project-agnostic. Project behavior is described by `ProjectProfile` and future deterministic `ProjectAdapter` implementations. Behavioral intent is represented separately from execution intent. LLMs, when introduced in a later milestone, may produce validated structured records only; they do not emit arbitrary executable Python, JavaScript, or shell.

@@ -73,6 +73,34 @@ def test_demo_has_no_private_fields_paths_or_fault_identity():
         assert not any(fault in text for fault in faults)
 
 
+def test_canonical_public_bytes_and_original_lineage_are_distinct():
+    provenance = read("provenance.json")
+    for name in provenance["artifacts"]:
+        data = (DEMO / name).read_bytes()
+        assert b"\r" not in data and data.endswith(b"\n"), name
+    evaluation = read("08-external-evaluation.json")
+    for name, kind in (("05-execution-record.json", "execution"), ("06-triage-record.json", "triage")):
+        item = provenance["artifacts"][name]
+        source = next(a for a in evaluation["request"]["source_artifacts"] if a["kind"] == kind)
+        assert item["source_sha256"] == source["sha256"]
+        assert item["sha256"] != item["source_sha256"]
+    evidence = provenance["artifacts"]["evidence/api-result-metadata.json"]
+    assert evidence["source_sha256"] in evaluation["request"]["lineage"]["evidence_hashes"]
+    assert evidence["sha256"] != evidence["source_sha256"]
+
+    def check_refs(value):
+        if isinstance(value, dict):
+            if value.get("uri", "").startswith("examples/demo/evidence/"):
+                assert value["sha256"] == hashlib.sha256((ROOT / value["uri"]).read_bytes()).hexdigest()
+            for child in value.values():
+                check_refs(child)
+        elif isinstance(value, list):
+            for child in value:
+                check_refs(child)
+    for name in ("05-execution-record.json", "06-triage-record.json"):
+        check_refs(read(name))
+
+
 def read_fault_ids():
     data = json.loads((ROOT / "qualification/m4/profiles.json").read_text())
     return [item["id"] for item in data["profiles"]]

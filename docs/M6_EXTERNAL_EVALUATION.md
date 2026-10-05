@@ -186,8 +186,8 @@ With existing separate environments, no installation or RWA startup is needed:
 .venv/Scripts/python.exe -B scripts/qualify_m6.py `
   --evidence qualification/m6/fixtures/evidence.json `
   --expectations qualification/m6/fixtures/expectations.json `
-  --evaluator-root C:/Projects/AgentGuard `
-  --evaluator-python C:/Projects/AgentGuard/.venv/Scripts/python.exe `
+  --evaluator-root ../AgentGuard `
+  --evaluator-python ../AgentGuard/.venv/Scripts/python.exe `
   --output reports/m6-qualification
 
 .venv/Scripts/python.exe -B scripts/report_quality_metrics.py `
@@ -249,4 +249,4 @@ Python 3.11.5 in separate existing environments. Final output is ignored under
   deterministic report serialization and privacy/fault-identity audits passed.
 - Zero live model calls, no RWA startup, no listeners on 3000/3001; both external
   repositories remained clean at their pinned revisions. Frozen M0 and AutoQE
-  runtime layers were unchanged. No commit or M7 work was performed.
+  runtime layers were unchanged. This qualification covered M6 only.

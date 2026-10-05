@@ -6,7 +6,7 @@
   "expected_behavior_reference": "payment-recorded-once",
   "limitations": [
     "Deterministic evidence classification; no inferred component-level root cause.",
-    "Sanitized static M4 projection: screenshot references omitted; API evidence relocated without changing bytes. No live M8 execution."
+    "Sanitized static M4 projection: screenshot references omitted; API evidence relocated with LF-normalized public bytes; original source hash retained in provenance.json. No live M8 execution."
   ],
   "observed_behavior_reference": "assertion:payment-recorded-once",
   "producer": "autoqe-triage",
@@ -25,7 +25,7 @@
     {
       "description": "Sanitized API status and assertion metadata; no request/response bodies or headers.",
       "kind": "API_RESULT_METADATA",
-      "sha256": "ca7241f84afb6931ff2ac10601a1f9bab3ff34de91f21f8cf5981d30161a30bd",
+      "sha256": "589cdc5b3a78aa22d96d3701a8ea1f88642f30ae3e657fc45b65785bd6ff8312",
       "uri": "examples/demo/evidence/api-result-metadata.json"
     }
   ],
